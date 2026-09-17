@@ -1,6 +1,6 @@
 /* =====================================================
    KASIRKU
-   LOGIN + KASIR + REKAP
+   LOGIN + KASIR + CASH + QRIS + REKAP
 ===================================================== */
 
 
@@ -12,7 +12,7 @@ const LOGIN_USERNAME = "admin";
 const LOGIN_PASSWORD = "12345";
 
 const LOGIN_SESSION_KEY =
-    "kasirku_login_session";
+    "kasirku_login_session_v2";
 
 
 /* =====================================================
@@ -20,14 +20,14 @@ const LOGIN_SESSION_KEY =
 ===================================================== */
 
 const PRODUCTS_KEY =
-    "kasirku_products_login_v1";
+    "kasirku_products_payment_v1";
 
 const TRANSACTIONS_KEY =
-    "kasirku_transactions_login_v1";
+    "kasirku_transactions_payment_v1";
 
 
 /* =====================================================
-   PRODUK
+   PRODUK DEFAULT
 ===================================================== */
 
 const defaultProducts = [
@@ -144,7 +144,7 @@ const defaultProducts = [
 
 
 /* =====================================================
-   DATA
+   DATA APLIKASI
 ===================================================== */
 
 let products =
@@ -179,20 +179,18 @@ function loadStorage(
 
     try {
 
-        const stored =
+        const saved =
             localStorage.getItem(key);
 
 
-        if (stored) {
+        if (saved) {
 
             const parsed =
-                JSON.parse(stored);
+                JSON.parse(saved);
 
 
             if (
-                Array.isArray(
-                    parsed
-                )
+                Array.isArray(parsed)
             ) {
 
                 return parsed;
@@ -204,6 +202,7 @@ function loadStorage(
     } catch (error) {
 
         console.error(
+            "Storage error:",
             error
         );
 
@@ -340,7 +339,7 @@ function escapeHtml(
 
 
 /* =====================================================
-   LOGIN CHECK
+   LOGIN
 ===================================================== */
 
 function checkLogin() {
@@ -399,10 +398,6 @@ function showApp() {
 
 }
 
-
-/* =====================================================
-   PROSES LOGIN
-===================================================== */
 
 function handleLogin(
     event
@@ -467,19 +462,14 @@ function handleLogin(
 }
 
 
-/* =====================================================
-   LOGOUT
-===================================================== */
-
 function logout() {
 
-    const confirmation =
-        confirm(
+    if (
+        !confirm(
             "Yakin ingin logout?"
-        );
+        )
+    ) {
 
-
-    if (!confirmation) {
         return;
     }
 
@@ -501,10 +491,6 @@ function logout() {
 
 }
 
-
-/* =====================================================
-   PASSWORD TOGGLE
-===================================================== */
 
 function togglePassword() {
 
@@ -575,6 +561,8 @@ function updateClock() {
 
 }
 
+
+updateClock();
 
 setInterval(
     updateClock,
@@ -654,7 +642,7 @@ function renderDashboard() {
 
 
 /* =====================================================
-   PRODUK KASIR
+   PRODUK
 ===================================================== */
 
 function renderProducts() {
@@ -727,6 +715,7 @@ function renderProducts() {
                     )}
                 </h3>
 
+
                 <div class="category">
 
                     ${escapeHtml(
@@ -741,6 +730,7 @@ function renderProducts() {
 
                 </div>
 
+
                 <div class="price">
 
                     ${formatRupiah(
@@ -748,6 +738,7 @@ function renderProducts() {
                     )}
 
                 </div>
+
 
                 <div
                     class="
@@ -765,8 +756,13 @@ function renderProducts() {
 
                 </div>
 
+
                 <button
-                    class="btn btn-primary btn-small"
+                    class="
+                        btn
+                        btn-primary
+                        btn-small
+                    "
                     onclick="
                         addToCart(
                             '${product.id}'
@@ -805,8 +801,8 @@ function addToCart(
 
     const product =
         products.find(
-            item =>
-                item.id ===
+            p =>
+                p.id ===
                 productId
         );
 
@@ -845,7 +841,7 @@ function addToCart(
         ) {
 
             alert(
-                "Stok tidak cukup."
+                "Jumlah melebihi stok."
             );
 
             return;
@@ -858,7 +854,9 @@ function addToCart(
 
         cart.push({
 
-            productId,
+            productId:
+                productId,
+
             qty:
                 1
 
@@ -872,13 +870,9 @@ function addToCart(
 }
 
 
-/* =====================================================
-   RENDER CART
-===================================================== */
-
 function renderCart() {
 
-    const list =
+    const cartList =
         get(
             "cartList"
         );
@@ -889,7 +883,7 @@ function renderCart() {
         0
     ) {
 
-        list.innerHTML = `
+        cartList.innerHTML = `
             <div class="empty">
                 Keranjang masih kosong.
             </div>
@@ -897,7 +891,7 @@ function renderCart() {
 
     } else {
 
-        list.innerHTML =
+        cartList.innerHTML =
             cart.map(
                 item => {
 
@@ -938,7 +932,6 @@ function renderCart() {
                                 )}
 
                                 ×
-
                                 ${item.qty}
 
                                 =
@@ -1010,10 +1003,6 @@ function renderCart() {
 }
 
 
-/* =====================================================
-   UBAH QTY
-===================================================== */
-
 function changeQty(
     productId,
     amount
@@ -1029,8 +1018,8 @@ function changeQty(
 
     const product =
         products.find(
-            product =>
-                product.id ===
+            p =>
+                p.id ===
                 productId
         );
 
@@ -1057,6 +1046,7 @@ function changeQty(
         );
 
         return;
+
     }
 
 
@@ -1068,9 +1058,8 @@ function changeQty(
         item.qty =
             product.stock;
 
-
         alert(
-            "Jumlah melebihi stok."
+            "Stok tidak cukup."
         );
 
     }
@@ -1080,10 +1069,6 @@ function changeQty(
 
 }
 
-
-/* =====================================================
-   HAPUS CART
-===================================================== */
 
 function removeFromCart(
     productId
@@ -1114,9 +1099,10 @@ function clearCart() {
 
     if (
         !confirm(
-            "Kosongkan keranjang?"
+            "Yakin ingin mengosongkan keranjang?"
         )
     ) {
+
         return;
     }
 
@@ -1130,7 +1116,64 @@ function clearCart() {
 
 
 /* =====================================================
-   TOTAL
+   METODE PEMBAYARAN
+===================================================== */
+
+function updatePaymentMethod() {
+
+    const method =
+        get(
+            "paymentMethod"
+        ).value;
+
+
+    const cashArea =
+        get(
+            "cashPaymentArea"
+        );
+
+
+    const qrisArea =
+        get(
+            "qrisPaymentArea"
+        );
+
+
+    if (
+        method ===
+        "CASH"
+    ) {
+
+        cashArea.classList.remove(
+            "hidden"
+        );
+
+        qrisArea.classList.add(
+            "hidden"
+        );
+
+    } else {
+
+        cashArea.classList.add(
+            "hidden"
+        );
+
+        qrisArea.classList.remove(
+            "hidden"
+        );
+
+        updateQrisTotal();
+
+    }
+
+
+    calculateTotal();
+
+}
+
+
+/* =====================================================
+   HITUNG TOTAL
 ===================================================== */
 
 function calculateTotal() {
@@ -1197,19 +1240,48 @@ function calculateTotal() {
         discount;
 
 
-    const payment =
-        Number(
-            get(
-                "payment"
-            ).value
-        ) || 0;
+    const method =
+        get(
+            "paymentMethod"
+        ).value;
 
 
-    const change =
-        Math.max(
-            0,
-            payment - total
-        );
+    let payment =
+        0;
+
+
+    let change =
+        0;
+
+
+    if (
+        method ===
+        "CASH"
+    ) {
+
+        payment =
+            Number(
+                get(
+                    "payment"
+                ).value
+            ) || 0;
+
+
+        change =
+            Math.max(
+                0,
+                payment - total
+            );
+
+    } else {
+
+        payment =
+            total;
+
+        change =
+            0;
+
+    }
 
 
     get(
@@ -1244,15 +1316,40 @@ function calculateTotal() {
         );
 
 
+    get(
+        "qrisTotal"
+    ).textContent =
+        formatRupiah(
+            total
+        );
+
+
     return {
 
         subtotal,
         discount,
         total,
         payment,
-        change
+        change,
+        method
 
     };
+
+}
+
+
+function updateQrisTotal() {
+
+    const result =
+        calculateTotal();
+
+
+    get(
+        "qrisTotal"
+    ).textContent =
+        formatRupiah(
+            result.total
+        );
 
 }
 
@@ -1280,16 +1377,45 @@ function checkout() {
         calculateTotal();
 
 
+    /* CASH */
+
     if (
-        result.payment <
-        result.total
+        result.method ===
+        "CASH"
     ) {
 
-        alert(
-            "Uang pembayaran masih kurang."
-        );
+        if (
+            result.payment <
+            result.total
+        ) {
 
-        return;
+            alert(
+                "Uang pembayaran masih kurang."
+            );
+
+            return;
+        }
+
+    }
+
+
+    /* QRIS */
+
+    if (
+        result.method ===
+        "QRIS"
+    ) {
+
+        const confirmation =
+            confirm(
+                `Pastikan pembayaran QRIS sebesar ${formatRupiah(result.total)} sudah diterima. Lanjutkan transaksi?`
+            );
+
+
+        if (!confirmation) {
+            return;
+        }
+
     }
 
 
@@ -1353,7 +1479,7 @@ function checkout() {
     );
 
 
-    /* SIMPAN TRANSAKSI */
+    /* TRANSAKSI */
 
     const transaction = {
 
@@ -1363,6 +1489,9 @@ function checkout() {
 
         date:
             new Date().toISOString(),
+
+        paymentMethod:
+            result.method,
 
         items:
             cart.map(
@@ -1442,6 +1571,17 @@ function checkout() {
         "";
 
 
+    /* KEMBALIKAN CASH */
+
+    get(
+        "paymentMethod"
+    ).value =
+        "CASH";
+
+
+    updatePaymentMethod();
+
+
     renderAll();
 
 
@@ -1468,15 +1608,13 @@ function showReceipt(
         "================================\n";
 
     text +=
-        "             KASIRKU\n";
+        "              KASIRKU\n";
 
     text +=
         "================================\n";
 
     text +=
-        `Invoice : ${
-            transaction.invoice
-        }\n`;
+        `Invoice : ${transaction.invoice}\n`;
 
     text +=
         `Tanggal : ${
@@ -1485,6 +1623,11 @@ function showReceipt(
             ).toLocaleString(
                 "id-ID"
             )
+        }\n`;
+
+    text +=
+        `Metode  : ${
+            transaction.paymentMethod
         }\n`;
 
     text +=
@@ -1515,12 +1658,14 @@ function showReceipt(
     text +=
         "--------------------------------\n";
 
+
     text +=
         `Subtotal  : ${
             formatRupiah(
                 transaction.subtotal
             )
         }\n`;
+
 
     text +=
         `Diskon    : ${
@@ -1529,12 +1674,14 @@ function showReceipt(
             )
         }\n`;
 
+
     text +=
         `TOTAL     : ${
             formatRupiah(
                 transaction.total
             )
         }\n`;
+
 
     text +=
         `Bayar     : ${
@@ -1543,6 +1690,7 @@ function showReceipt(
             )
         }\n`;
 
+
     text +=
         `Kembalian : ${
             formatRupiah(
@@ -1550,11 +1698,14 @@ function showReceipt(
             )
         }\n`;
 
+
     text +=
         "--------------------------------\n";
 
+
     text +=
         "          TERIMA KASIH\n";
+
 
     text +=
         "================================";
@@ -1615,20 +1766,16 @@ function printReceipt() {
 
         </head>
 
-
         <body>
 
             <pre
                 style="
-                    font-family:
-                        monospace;
-                    font-size:
-                        14px;
+                    font-family: monospace;
+                    font-size: 14px;
                 "
             >${escapeHtml(
                 currentReceipt
             )}</pre>
-
 
             <script>
 
@@ -1699,13 +1846,11 @@ function renderProductTable() {
                     )}
                 </td>
 
-
                 <td>
                     ${escapeHtml(
                         product.name
                     )}
                 </td>
-
 
                 <td>
                     ${escapeHtml(
@@ -1713,24 +1858,23 @@ function renderProductTable() {
                     )}
                 </td>
 
-
                 <td>
                     ${formatRupiah(
                         product.price
                     )}
                 </td>
 
-
                 <td
-                    class="${
-                        product.stock <= 5
-                            ? "low"
-                            : ""
-                    }"
+                    class="
+                        ${
+                            product.stock <= 5
+                                ? "low"
+                                : ""
+                        }
+                    "
                 >
                     ${product.stock}
                 </td>
-
 
                 <td>
 
@@ -1748,7 +1892,6 @@ function renderProductTable() {
                     >
                         Edit
                     </button>
-
 
                     <button
                         class="
@@ -1965,7 +2108,8 @@ function saveProduct(
 
 
         if (
-            index !== -1
+            index !==
+            -1
         ) {
 
             products[index] = {
@@ -2020,8 +2164,9 @@ function editProduct(
 
     const product =
         products.find(
-            product =>
-                product.id === id
+            p =>
+                p.id ===
+                id
         );
 
 
@@ -2046,8 +2191,9 @@ function deleteProduct(
 
     const product =
         products.find(
-            product =>
-                product.id === id
+            p =>
+                p.id ===
+                id
         );
 
 
@@ -2068,15 +2214,17 @@ function deleteProduct(
 
     products =
         products.filter(
-            product =>
-                product.id !== id
+            p =>
+                p.id !==
+                id
         );
 
 
     cart =
         cart.filter(
             item =>
-                item.productId !== id
+                item.productId !==
+                id
         );
 
 
@@ -2108,7 +2256,7 @@ function renderTransactions() {
             <tr>
 
                 <td
-                    colspan="6"
+                    colspan="7"
                     class="empty"
                 >
                     Belum ada transaksi.
@@ -2135,7 +2283,6 @@ function renderTransactions() {
 
 
                 <td>
-
                     ${
                         new Date(
                             transaction.date
@@ -2143,40 +2290,42 @@ function renderTransactions() {
                             "id-ID"
                         )
                     }
-
                 </td>
 
 
                 <td>
 
+                    <strong>
+                        ${transaction.paymentMethod}
+                    </strong>
+
+                </td>
+
+
+                <td>
                     ${
                         formatRupiah(
                             transaction.total
                         )
                     }
-
                 </td>
 
 
                 <td>
-
                     ${
                         formatRupiah(
                             transaction.payment
                         )
                     }
-
                 </td>
 
 
                 <td>
-
                     ${
                         formatRupiah(
                             transaction.change
                         )
                     }
-
                 </td>
 
 
@@ -2207,18 +2356,14 @@ function renderTransactions() {
 }
 
 
-/* =====================================================
-   LIHAT TRANSAKSI
-===================================================== */
-
 function viewTransaction(
     invoice
 ) {
 
     const transaction =
         transactions.find(
-            item =>
-                item.invoice ===
+            transaction =>
+                transaction.invoice ===
                 invoice
         );
 
@@ -2235,7 +2380,7 @@ function viewTransaction(
 
 
 /* =====================================================
-   HAPUS SEMUA RIWAYAT
+   HAPUS RIWAYAT
 ===================================================== */
 
 function clearTransactions() {
@@ -2255,7 +2400,7 @@ function clearTransactions() {
 
     if (
         !confirm(
-            "Yakin ingin menghapus SEMUA riwayat?"
+            "Yakin ingin menghapus SEMUA riwayat transaksi?"
         )
     ) {
 
@@ -2336,6 +2481,14 @@ function renderDailyReport() {
         0;
 
 
+    let cashRevenue =
+        0;
+
+
+    let qrisRevenue =
+        0;
+
+
     const productSummary =
         {};
 
@@ -2353,6 +2506,32 @@ function renderDailyReport() {
                 Number(
                     transaction.total
                 ) || 0;
+
+
+            if (
+                transaction.paymentMethod ===
+                "CASH"
+            ) {
+
+                cashRevenue +=
+                    Number(
+                        transaction.total
+                    ) || 0;
+
+            }
+
+
+            if (
+                transaction.paymentMethod ===
+                "QRIS"
+            ) {
+
+                qrisRevenue +=
+                    Number(
+                        transaction.total
+                    ) || 0;
+
+            }
 
 
             transaction.items.forEach(
@@ -2441,6 +2620,22 @@ function renderDailyReport() {
         );
 
 
+    get(
+        "rekapCash"
+    ).textContent =
+        formatRupiah(
+            cashRevenue
+        );
+
+
+    get(
+        "rekapQris"
+    ).textContent =
+        formatRupiah(
+            qrisRevenue
+        );
+
+
     const table =
         get(
             "rekapProduk"
@@ -2477,8 +2672,8 @@ function renderDailyReport() {
 
     entries.sort(
         (
-            [,a],
-            [,b]
+            [, a],
+            [, b]
         ) =>
             b.qty -
             a.qty
@@ -2489,25 +2684,27 @@ function renderDailyReport() {
         entries.map(
             ([name,data]) => `
 
-                <tr>
+            <tr>
 
-                    <td>
-                        ${escapeHtml(name)}
-                    </td>
+                <td>
+                    ${escapeHtml(
+                        name
+                    )}
+                </td>
 
-                    <td>
-                        ${data.qty}
-                    </td>
+                <td>
+                    ${data.qty}
+                </td>
 
-                    <td>
-                        ${formatRupiah(
-                            data.total
-                        )}
-                    </td>
+                <td>
+                    ${formatRupiah(
+                        data.total
+                    )}
+                </td>
 
-                </tr>
+            </tr>
 
-            `
+        `
         ).join("");
 
 }
@@ -2546,6 +2743,14 @@ function printDailyReport() {
         0;
 
 
+    let cashRevenue =
+        0;
+
+
+    let qrisRevenue =
+        0;
+
+
     const productsReport =
         {};
 
@@ -2563,6 +2768,32 @@ function printDailyReport() {
                 Number(
                     transaction.total
                 ) || 0;
+
+
+            if (
+                transaction.paymentMethod ===
+                "CASH"
+            ) {
+
+                cashRevenue +=
+                    Number(
+                        transaction.total
+                    ) || 0;
+
+            }
+
+
+            if (
+                transaction.paymentMethod ===
+                "QRIS"
+            ) {
+
+                qrisRevenue +=
+                    Number(
+                        transaction.total
+                    ) || 0;
+
+            }
 
 
             transaction.items.forEach(
@@ -2601,7 +2832,8 @@ function printDailyReport() {
     );
 
 
-    let text = "";
+    let text =
+        "";
 
 
     text +=
@@ -2633,6 +2865,16 @@ function printDailyReport() {
         )}\n`;
 
     text +=
+        `Omzet Cash      : ${formatRupiah(
+            cashRevenue
+        )}\n`;
+
+    text +=
+        `Omzet QRIS      : ${formatRupiah(
+            qrisRevenue
+        )}\n`;
+
+    text +=
         "------------------------------------\n";
 
     text +=
@@ -2645,7 +2887,7 @@ function printDailyReport() {
     Object.entries(
         productsReport
     ).forEach(
-        ([name,qty]) => {
+        ([name, qty]) => {
 
             text +=
                 `${name} : ${qty}\n`;
@@ -2677,12 +2919,15 @@ function printDailyReport() {
 
 
     printWindow.document.write(`
+
         <html>
 
         <head>
+
             <title>
                 Rekap Penjualan
             </title>
+
         </head>
 
         <body>
@@ -2692,18 +2937,25 @@ function printDailyReport() {
                     font-family: monospace;
                     font-size: 14px;
                 "
-            >${escapeHtml(text)}</pre>
+            >${escapeHtml(
+                text
+            )}</pre>
 
             <script>
+
                 window.onload =
                     function() {
+
                         window.print();
+
                     };
+
             <\/script>
 
         </body>
 
         </html>
+
     `);
 
 
@@ -2826,6 +3078,14 @@ function setupEvents() {
     ).addEventListener(
         "input",
         renderProducts
+    );
+
+
+    get(
+        "paymentMethod"
+    ).addEventListener(
+        "change",
+        updatePaymentMethod
     );
 
 
@@ -2987,6 +3247,15 @@ document.addEventListener(
             "rekapDate"
         ).value =
             getToday();
+
+
+        get(
+            "paymentMethod"
+        ).value =
+            "CASH";
+
+
+        updatePaymentMethod();
 
 
         setupTabs();
