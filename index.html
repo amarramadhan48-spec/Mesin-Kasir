@@ -29,7 +29,6 @@
             Silakan login untuk masuk ke sistem kasir
         </p>
 
-
         <form id="loginForm">
 
             <label for="username">
@@ -43,7 +42,6 @@
                 autocomplete="username"
                 required
             >
-
 
             <label for="password">
                 Password
@@ -69,12 +67,7 @@
 
             </div>
 
-
-            <p
-                id="loginError"
-                class="login-error"
-            ></p>
-
+            <p id="loginError" class="login-error"></p>
 
             <button
                 type="submit"
@@ -85,20 +78,16 @@
 
         </form>
 
-
     </div>
 
 </div>
 
 
 <!-- =====================================================
-     APLIKASI
+     APP
 ===================================================== -->
 
-<div
-    id="appPage"
-    class="app-hidden"
->
+<div id="appPage" class="app-hidden">
 
     <!-- HEADER -->
 
@@ -108,22 +97,15 @@
 
             <h1>KasirKu</h1>
 
-            <p>
-                Sistem Mesin Kasir
-            </p>
+            <p>Sistem Mesin Kasir</p>
 
         </div>
 
-
         <div class="topbar-right">
 
-            <div
-                id="clock"
-                class="clock"
-            >
+            <div id="clock" class="clock">
                 -
             </div>
-
 
             <button
                 id="logoutBtn"
@@ -137,74 +119,53 @@
     </header>
 
 
-    <!-- MAIN -->
-
     <main class="container">
 
 
-        <!-- =============================================
-             STATISTIK
-        ============================================== -->
+        <!-- =================================================
+             STATISTIK DASHBOARD
+        ================================================== -->
 
         <section class="stats">
 
             <div class="stat-card">
-
-                <span>
-                    Total Produk
-                </span>
+                <span>Total Produk</span>
 
                 <strong id="statProducts">
                     0
                 </strong>
-
             </div>
 
-
             <div class="stat-card">
-
-                <span>
-                    Transaksi Hari Ini
-                </span>
+                <span>Transaksi Hari Ini</span>
 
                 <strong id="statTransactions">
                     0
                 </strong>
-
             </div>
 
-
             <div class="stat-card">
-
-                <span>
-                    Omzet Hari Ini
-                </span>
+                <span>Omzet Hari Ini</span>
 
                 <strong id="statRevenue">
                     Rp0
                 </strong>
-
             </div>
 
-
             <div class="stat-card">
-
-                <span>
-                    Stok Menipis
-                </span>
+                <span>Stok Menipis</span>
 
                 <strong id="statLowStock">
                     0
                 </strong>
-
             </div>
 
         </section>
 
 
-        <!-- =============================================
-             MENU
-        ============================================== -->
+        <!-- =================================================
+             TAB
+        ================================================== -->
 
         <nav class="tabs">
 
@@ -215,7 +176,6 @@
                 Kasir
             </button>
 
-
             <button
                 class="tab"
                 data-tab="produk"
@@ -223,14 +183,12 @@
                 Produk
             </button>
 
-
             <button
                 class="tab"
                 data-tab="riwayat"
             >
                 Riwayat
             </button>
-
 
             <button
                 class="tab"
@@ -242,9 +200,9 @@
         </nav>
 
 
-        <!-- =============================================
+        <!-- =================================================
              KASIR
-        ============================================== -->
+        ================================================== -->
 
         <section
             id="kasir"
@@ -254,7 +212,7 @@
             <div class="cashier-grid">
 
 
-                <!-- PRODUK -->
+                <!-- DAFTAR PRODUK -->
 
                 <div class="panel">
 
@@ -262,16 +220,13 @@
 
                         <div>
 
-                            <h2>
-                                Daftar Produk
-                            </h2>
+                            <h2>Daftar Produk</h2>
 
                             <p class="panel-subtitle">
                                 Pilih produk untuk transaksi
                             </p>
 
                         </div>
-
 
                         <input
                             type="search"
@@ -291,7 +246,7 @@
                 </div>
 
 
-                <!-- CART -->
+                <!-- KERANJANG -->
 
                 <div class="panel">
 
@@ -299,16 +254,13 @@
 
                         <div>
 
-                            <h2>
-                                Keranjang
-                            </h2>
+                            <h2>Keranjang</h2>
 
                             <p class="panel-subtitle">
                                 Produk yang dipilih
                             </p>
 
                         </div>
-
 
                         <button
                             id="clearCart"
@@ -325,6 +277,8 @@
                         class="cart-list"
                     ></div>
 
+
+                    <!-- TOTAL -->
 
                     <div class="summary">
 
@@ -369,42 +323,87 @@
                     </div>
 
 
+                    <!-- PEMBAYARAN -->
+
                     <div class="payment-section">
 
-                        <label for="discount">
-                            Diskon
+                        <label for="paymentMethod">
+                            Metode Pembayaran
                         </label>
 
-                        <input
-                            type="number"
-                            id="discount"
-                            min="0"
-                            value="0"
-                            placeholder="0"
+                        <select id="paymentMethod">
+
+                            <option value="CASH">
+                                Cash
+                            </option>
+
+                            <option value="QRIS">
+                                QRIS
+                            </option>
+
+                        </select>
+
+
+                        <!-- CASH -->
+
+                        <div id="cashPaymentArea">
+
+                            <label for="payment">
+                                Uang Dibayar
+                            </label>
+
+                            <input
+                                type="number"
+                                id="payment"
+                                min="0"
+                                placeholder="Masukkan uang"
+                            >
+
+                            <div class="change-box">
+
+                                <span>
+                                    Kembalian
+                                </span>
+
+                                <strong id="change">
+                                    Rp0
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- QRIS -->
+
+                        <div
+                            id="qrisPaymentArea"
+                            class="qris-box hidden"
                         >
 
+                            <div class="qris-icon">
+                                📱
+                            </div>
 
-                        <label for="payment">
-                            Uang Dibayar
-                        </label>
-
-                        <input
-                            type="number"
-                            id="payment"
-                            min="0"
-                            placeholder="Masukkan uang"
-                        >
-
-
-                        <div class="change-box">
-
-                            <span>
-                                Kembalian
-                            </span>
-
-                            <strong id="change">
-                                Rp0
+                            <strong>
+                                Pembayaran QRIS
                             </strong>
+
+                            <p>
+                                Pastikan pelanggan sudah
+                                menyelesaikan pembayaran
+                                melalui QRIS sebelum
+                                transaksi disimpan.
+                            </p>
+
+                            <div class="qris-total">
+
+                                Total QRIS:
+                                <strong id="qrisTotal">
+                                    Rp0
+                                </strong>
+
+                            </div>
 
                         </div>
 
@@ -425,9 +424,9 @@
         </section>
 
 
-        <!-- =============================================
+        <!-- =================================================
              PRODUK
-        ============================================== -->
+        ================================================== -->
 
         <section
             id="produk"
@@ -450,7 +449,6 @@
 
                     </div>
 
-
                     <button
                         id="addProductBtn"
                         class="btn btn-primary"
@@ -468,16 +466,17 @@
                         <thead>
 
                             <tr>
+
                                 <th>Kode</th>
                                 <th>Produk</th>
                                 <th>Kategori</th>
                                 <th>Harga</th>
                                 <th>Stok</th>
                                 <th>Aksi</th>
+
                             </tr>
 
                         </thead>
-
 
                         <tbody
                             id="productTableBody"
@@ -492,9 +491,9 @@
         </section>
 
 
-        <!-- =============================================
+        <!-- =================================================
              RIWAYAT
-        ============================================== -->
+        ================================================== -->
 
         <section
             id="riwayat"
@@ -517,7 +516,6 @@
 
                     </div>
 
-
                     <button
                         id="clearTransactions"
                         class="btn btn-danger"
@@ -536,34 +534,17 @@
 
                             <tr>
 
-                                <th>
-                                    Invoice
-                                </th>
-
-                                <th>
-                                    Tanggal
-                                </th>
-
-                                <th>
-                                    Total
-                                </th>
-
-                                <th>
-                                    Bayar
-                                </th>
-
-                                <th>
-                                    Kembalian
-                                </th>
-
-                                <th>
-                                    Aksi
-                                </th>
+                                <th>Invoice</th>
+                                <th>Tanggal</th>
+                                <th>Metode</th>
+                                <th>Total</th>
+                                <th>Bayar</th>
+                                <th>Kembalian</th>
+                                <th>Aksi</th>
 
                             </tr>
 
                         </thead>
-
 
                         <tbody
                             id="transactionTableBody"
@@ -578,9 +559,9 @@
         </section>
 
 
-        <!-- =============================================
+        <!-- =================================================
              REKAP HARIAN
-        ============================================== -->
+        ================================================== -->
 
         <section
             id="rekap"
@@ -598,7 +579,7 @@
                         </h2>
 
                         <p class="panel-subtitle">
-                            Laporan penjualan berdasarkan tanggal
+                            Laporan berdasarkan tanggal
                         </p>
 
                     </div>
@@ -619,6 +600,8 @@
 
                 </div>
 
+
+                <!-- STATISTIK REKAP -->
 
                 <div class="stats report-stats">
 
@@ -668,6 +651,38 @@
                         </span>
 
                         <strong id="rekapOmzet">
+                            Rp0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PEMBAYARAN -->
+
+                <div class="payment-summary">
+
+                    <div class="payment-summary-card cash-summary">
+
+                        <span>
+                            Omzet Cash
+                        </span>
+
+                        <strong id="rekapCash">
+                            Rp0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="payment-summary-card qris-summary">
+
+                        <span>
+                            Omzet QRIS
+                        </span>
+
+                        <strong id="rekapQris">
                             Rp0
                         </strong>
 
@@ -733,9 +748,9 @@
     </main>
 
 
-    <!-- ================================================
+    <!-- =================================================
          MODAL PRODUK
-    ================================================= -->
+    ================================================== -->
 
     <div
         id="productModal"
@@ -749,7 +764,6 @@
                 <h3 id="modalTitle">
                     Tambah Produk
                 </h3>
-
 
                 <button
                     id="closeModal"
@@ -847,9 +861,9 @@
     </div>
 
 
-    <!-- ================================================
+    <!-- =================================================
          MODAL STRUK
-    ================================================= -->
+    ================================================== -->
 
     <div
         id="receiptModal"
@@ -863,7 +877,6 @@
                 <h3>
                     Struk Pembayaran
                 </h3>
-
 
                 <button
                     id="closeReceipt"
