@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KasirKu - Mesin Kasir</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
+<div id="loginPage" class="login-page">
+
+    <div class="login-card">
+
+        <div class="login-logo">
+            🛒
+        </div>
+
+        <h1>KasirKu</h1>
+
+        <p class="login-subtitle">
+            Silakan login untuk masuk ke sistem kasir
+        </p>
+
+
+        <form id="loginForm">
+
+            <label for="username">
+                Username
+            </label>
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Masukkan username"
+                autocomplete="username"
+                required
+            >
+
+
+            <label for="password">
+                Password
+            </label>
+
+            <div class="password-wrapper">
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Masukkan password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <button
+                    type="button"
+                    id="togglePassword"
+                    class="show-password"
+                >
+                    👁
+                </button>
+
+            </div>
+
+
+            <p
+                id="loginError"
+                class="login-error"
+            ></p>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary btn-large"
+            >
+                Masuk
+            </button>
+
+        </form>
+
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     APLIKASI
+===================================================== -->
+
+<div
+    id="appPage"
+    class="app-hidden"
+>
+
+    <!-- HEADER -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <h1>KasirKu</h1>
+
+            <p>
+                Sistem Mesin Kasir
+            </p>
+
+        </div>
+
+
+        <div class="topbar-right">
+
+            <div
+                id="clock"
+                class="clock"
+            >
+                -
+            </div>
+
+
+            <button
+                id="logoutBtn"
+                class="logout-btn"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+
+        <!-- =============================================
+             STATISTIK
+        ============================================== -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <span>
+                    Total Produk
+                </span>
+
+                <strong id="statProducts">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Transaksi Hari Ini
+                </span>
+
+                <strong id="statTransactions">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Omzet Hari Ini
+                </span>
+
+                <strong id="statRevenue">
+                    Rp0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Stok Menipis
+                </span>
+
+                <strong id="statLowStock">
+                    0
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- =============================================
+             MENU
+        ============================================== -->
+
+        <nav class="tabs">
+
+            <button
+                class="tab active"
+                data-tab="kasir"
+            >
+                Kasir
+            </button>
+
+
+            <button
+                class="tab"
+                data-tab="produk"
+            >
+                Produk
+            </button>
+
+
+            <button
+                class="tab"
+                data-tab="riwayat"
+            >
+                Riwayat
+            </button>
+
+
+            <button
+                class="tab"
+                data-tab="rekap"
+            >
+                Rekap Harian
+            </button>
+
+        </nav>
+
+
+        <!-- =============================================
+             KASIR
+        ============================================== -->
+
+        <section
+            id="kasir"
+            class="tab-content active"
+        >
+
+            <div class="cashier-grid">
+
+
+                <!-- PRODUK -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h2>
+                                Daftar Produk
+                            </h2>
+
+                            <p class="panel-subtitle">
+                                Pilih produk untuk transaksi
+                            </p>
+
+                        </div>
+
+
+                        <input
+                            type="search"
+                            id="searchProduct"
+                            class="search"
+                            placeholder="Cari produk..."
+                        >
+
+                    </div>
+
+
+                    <div
+                        id="productGrid"
+                        class="product-grid"
+                    ></div>
+
+                </div>
+
+
+                <!-- CART -->
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h2>
+                                Keranjang
+                            </h2>
+
+                            <p class="panel-subtitle">
+                                Produk yang dipilih
+                            </p>
+
+                        </div>
+
+
+                        <button
+                            id="clearCart"
+                            class="btn btn-danger btn-small"
+                        >
+                            Kosongkan
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="cartList"
+                        class="cart-list"
+                    ></div>
+
+
+                    <div class="summary">
+
+                        <div class="summary-row">
+
+                            <span>
+                                Subtotal
+                            </span>
+
+                            <strong id="subtotal">
+                                Rp0
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span>
+                                Diskon
+                            </span>
+
+                            <strong id="discountLabel">
+                                Rp0
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-row grand-total">
+
+                            <span>
+                                TOTAL
+                            </span>
+
+                            <strong id="grandTotal">
+                                Rp0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="payment-section">
+
+                        <label for="discount">
+                            Diskon
+                        </label>
+
+                        <input
+                            type="number"
+                            id="discount"
+                            min="0"
+                            value="0"
+                            placeholder="0"
+                        >
+
+
+                        <label for="payment">
+                            Uang Dibayar
+                        </label>
+
+                        <input
+                            type="number"
+                            id="payment"
+                            min="0"
+                            placeholder="Masukkan uang"
+                        >
+
+
+                        <div class="change-box">
+
+                            <span>
+                                Kembalian
+                            </span>
+
+                            <strong id="change">
+                                Rp0
+                            </strong>
+
+                        </div>
+
+
+                        <button
+                            id="checkoutBtn"
+                            class="btn btn-primary btn-large"
+                        >
+                            Bayar & Simpan
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =============================================
+             PRODUK
+        ============================================== -->
+
+        <section
+            id="produk"
+            class="tab-content"
+        >
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h2>
+                            Manajemen Produk
+                        </h2>
+
+                        <p class="panel-subtitle">
+                            Kelola produk dan stok
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        id="addProductBtn"
+                        class="btn btn-primary"
+                    >
+                        + Tambah Produk
+                    </button>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Kode</th>
+                                <th>Produk</th>
+                                <th>Kategori</th>
+                                <th>Harga</th>
+                                <th>Stok</th>
+                                <th>Aksi</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="productTableBody"
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =============================================
+             RIWAYAT
+        ============================================== -->
+
+        <section
+            id="riwayat"
+            class="tab-content"
+        >
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h2>
+                            Riwayat Transaksi
+                        </h2>
+
+                        <p class="panel-subtitle">
+                            Semua transaksi
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        id="clearTransactions"
+                        class="btn btn-danger"
+                    >
+                        Hapus Semua Riwayat
+                    </button>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Invoice
+                                </th>
+
+                                <th>
+                                    Tanggal
+                                </th>
+
+                                <th>
+                                    Total
+                                </th>
+
+                                <th>
+                                    Bayar
+                                </th>
+
+                                <th>
+                                    Kembalian
+                                </th>
+
+                                <th>
+                                    Aksi
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="transactionTableBody"
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =============================================
+             REKAP HARIAN
+        ============================================== -->
+
+        <section
+            id="rekap"
+            class="tab-content"
+        >
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h2>
+                            Rekap Penjualan Harian
+                        </h2>
+
+                        <p class="panel-subtitle">
+                            Laporan penjualan berdasarkan tanggal
+                        </p>
+
+                    </div>
+
+
+                    <div class="report-date">
+
+                        <label for="rekapDate">
+                            Tanggal
+                        </label>
+
+                        <input
+                            type="date"
+                            id="rekapDate"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="stats report-stats">
+
+                    <div class="stat-card">
+
+                        <span>
+                            Total Transaksi
+                        </span>
+
+                        <strong id="rekapTransaksi">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span>
+                            Item Terjual
+                        </span>
+
+                        <strong id="rekapItem">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span>
+                            Total Diskon
+                        </span>
+
+                        <strong id="rekapDiskon">
+                            Rp0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span>
+                            Total Omzet
+                        </span>
+
+                        <strong id="rekapOmzet">
+                            Rp0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <h3>
+                    Produk Terjual
+                </h3>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Produk
+                                </th>
+
+                                <th>
+                                    Jumlah
+                                </th>
+
+                                <th>
+                                    Total
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="rekapProduk"
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+
+                <div class="report-actions">
+
+                    <button
+                        id="printRekap"
+                        class="btn btn-primary"
+                    >
+                        Cetak Rekap
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================================================
+         MODAL PRODUK
+    ================================================= -->
+
+    <div
+        id="productModal"
+        class="modal hidden"
+    >
+
+        <div class="modal-card">
+
+            <div class="modal-header">
+
+                <h3 id="modalTitle">
+                    Tambah Produk
+                </h3>
+
+
+                <button
+                    id="closeModal"
+                    class="icon-button"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="productForm">
+
+                <label for="productCode">
+                    Kode Produk
+                </label>
+
+                <input
+                    id="productCode"
+                    required
+                    placeholder="PRD013"
+                >
+
+
+                <label for="productName">
+                    Nama Produk
+                </label>
+
+                <input
+                    id="productName"
+                    required
+                    placeholder="Nama produk"
+                >
+
+
+                <label for="productCategory">
+                    Kategori
+                </label>
+
+                <input
+                    id="productCategory"
+                    required
+                    placeholder="Makanan"
+                >
+
+
+                <label for="productPrice">
+                    Harga
+                </label>
+
+                <input
+                    id="productPrice"
+                    type="number"
+                    min="0"
+                    required
+                >
+
+
+                <label for="productStock">
+                    Stok
+                </label>
+
+                <input
+                    id="productStock"
+                    type="number"
+                    min="0"
+                    required
+                >
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        id="cancelModal"
+                        class="btn btn-secondary"
+                    >
+                        Batal
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Simpan
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================
+         MODAL STRUK
+    ================================================= -->
+
+    <div
+        id="receiptModal"
+        class="modal hidden"
+    >
+
+        <div class="modal-card receipt-card">
+
+            <div class="modal-header">
+
+                <h3>
+                    Struk Pembayaran
+                </h3>
+
+
+                <button
+                    id="closeReceipt"
+                    class="icon-button"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                id="receiptContent"
+                class="receipt"
+            ></div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    id="printReceipt"
+                    class="btn btn-primary"
+                >
+                    Cetak Struk
+                </button>
+
+
+                <button
+                    id="closeReceiptBtn"
+                    class="btn btn-secondary"
+                >
+                    Tutup
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
