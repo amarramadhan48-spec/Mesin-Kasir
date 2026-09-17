@@ -48,7 +48,7 @@ body {
 
     max-width: 420px;
 
-    background: white;
+    background: #ffffff;
 
     padding: 35px;
 
@@ -56,7 +56,7 @@ body {
 
     box-shadow:
         0 20px 50px
-        rgba(0,0,0,.25);
+        rgba(0, 0, 0, 0.25);
 
     text-align: center;
 }
@@ -68,7 +68,8 @@ body {
 
     height: 70px;
 
-    margin: 0 auto 15px;
+    margin:
+        0 auto 15px;
 
     display: flex;
 
@@ -89,8 +90,7 @@ body {
     margin:
         0 0 8px;
 
-    font-size:
-        28px;
+    font-size: 28px;
 }
 
 
@@ -98,11 +98,9 @@ body {
 
     color: #6b7280;
 
-    margin-bottom:
-        25px;
+    margin-bottom: 25px;
 
-    font-size:
-        14px;
+    font-size: 14px;
 }
 
 
@@ -115,11 +113,9 @@ body {
     margin:
         12px 0 6px;
 
-    font-size:
-        13px;
+    font-size: 13px;
 
-    font-weight:
-        bold;
+    font-weight: bold;
 }
 
 
@@ -127,17 +123,14 @@ body {
 
     width: 100%;
 
-    padding:
-        12px;
+    padding: 12px;
 
     border:
         1px solid #d1d5db;
 
-    border-radius:
-        8px;
+    border-radius: 8px;
 
-    outline:
-        none;
+    outline: none;
 }
 
 
@@ -149,8 +142,7 @@ body {
 
 .password-wrapper input {
 
-    padding-right:
-        45px;
+    padding-right: 45px;
 }
 
 
@@ -177,50 +169,23 @@ body {
 
 .login-error {
 
-    min-height:
-        18px;
+    min-height: 18px;
 
-    color:
-        #dc2626;
+    color: #dc2626;
 
-    font-size:
-        13px;
+    font-size: 13px;
 
-    margin:
-        10px 0;
-}
-
-
-.login-info {
-
-    margin-top:
-        20px;
-
-    padding:
-        10px;
-
-    background:
-        #f9fafb;
-
-    border-radius:
-        8px;
-
-    color:
-        #6b7280;
-
-    font-size:
-        12px;
+    margin: 10px 0;
 }
 
 
 /* =====================================================
-   HIDE APP
+   APP
 ===================================================== */
 
 .app-hidden {
 
-    display:
-        none;
+    display: none;
 }
 
 
@@ -230,23 +195,19 @@ body {
 
 .topbar {
 
-    background:
-        #111827;
+    background: #111827;
 
-    color:
-        white;
+    color: #ffffff;
 
     padding:
         18px 30px;
 
-    display:
-        flex;
+    display: flex;
 
     justify-content:
         space-between;
 
-    align-items:
-        center;
+    align-items: center;
 }
 
 
@@ -254,8 +215,7 @@ body {
 
     margin: 0;
 
-    font-size:
-        28px;
+    font-size: 28px;
 }
 
 
@@ -264,76 +224,60 @@ body {
     margin:
         4px 0 0;
 
-    color:
-        #d1d5db;
+    color: #d1d5db;
 
-    font-size:
-        13px;
+    font-size: 13px;
 }
 
 
 .topbar-right {
 
-    display:
-        flex;
+    display: flex;
 
-    align-items:
-        center;
+    align-items: center;
 
-    gap:
-        15px;
+    gap: 15px;
 }
 
 
 .clock {
 
-    font-size:
-        13px;
+    font-size: 13px;
 
-    font-weight:
-        bold;
+    font-weight: bold;
 }
 
 
 .logout-btn {
 
-    border:
-        none;
+    border: none;
 
-    background:
-        #dc2626;
+    background: #dc2626;
 
-    color:
-        white;
+    color: #ffffff;
 
     padding:
         9px 14px;
 
-    border-radius:
-        8px;
+    border-radius: 8px;
 
-    cursor:
-        pointer;
+    cursor: pointer;
 
-    font-weight:
-        bold;
+    font-weight: bold;
 }
 
 
 /* =====================================================
-   MAIN
+   CONTAINER
 ===================================================== */
 
 .container {
 
-    max-width:
-        1400px;
+    max-width: 1400px;
 
-    margin:
-        0 auto;
+    margin: 0 auto;
 
-    padding:
-        25px;
+    padding: 25px;
 }
 
 
@@ -343,33 +287,27 @@ body {
 
 .stats {
 
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         repeat(4, 1fr);
 
-    gap:
-        15px;
+    gap: 15px;
 
-    margin-bottom:
-        25px;
+    margin-bottom: 25px;
 }
 
 
 .stat-card {
 
-    background:
-        white;
+    background: #ffffff;
 
     border:
         1px solid #e5e7eb;
 
-    border-radius:
-        12px;
+    border-radius: 12px;
 
-    padding:
-        20px;
+    padding: 20px;
 
     box-shadow:
         0 3px 10px
@@ -379,24 +317,19 @@ body {
 
 .stat-card span {
 
-    color:
-        #6b7280;
+    color: #6b7280;
 
-    font-size:
-        13px;
+    font-size: 13px;
 }
 
 
 .stat-card strong {
 
-    display:
-        block;
+    display: block;
 
-    margin-top:
-        10px;
+    margin-top: 10px;
 
-    font-size:
-        24px;
+    font-size: 24px;
 }
 
 
@@ -406,70 +339,52 @@ body {
 
 .tabs {
 
-    display:
-        flex;
+    display: flex;
 
-    gap:
-        8px;
+    gap: 8px;
 
-    margin-bottom:
-        20px;
+    margin-bottom: 20px;
 
-    flex-wrap:
-        wrap;
+    flex-wrap: wrap;
 }
 
 
 .tab {
 
-    border:
-        none;
+    border: none;
 
-    background:
-        #e5e7eb;
+    background: #e5e7eb;
 
-    color:
-        #374151;
+    color: #374151;
 
     padding:
         11px 18px;
 
-    border-radius:
-        8px;
+    border-radius: 8px;
 
-    font-weight:
-        bold;
+    font-weight: bold;
 
-    cursor:
-        pointer;
+    cursor: pointer;
 }
 
 
 .tab.active {
 
-    background:
-        #2563eb;
+    background: #2563eb;
 
-    color:
-        white;
+    color: #ffffff;
 }
 
 
-/* =====================================================
-   CONTENT
-===================================================== */
-
 .tab-content {
 
-    display:
-        none;
+    display: none;
 }
 
 
 .tab-content.active {
 
-    display:
-        block;
+    display: block;
 }
 
 
@@ -479,17 +394,14 @@ body {
 
 .panel {
 
-    background:
-        white;
+    background: #ffffff;
 
     border:
         1px solid #e5e7eb;
 
-    border-radius:
-        12px;
+    border-radius: 12px;
 
-    padding:
-        20px;
+    padding: 20px;
 
     box-shadow:
         0 3px 10px
@@ -499,30 +411,24 @@ body {
 
 .panel-header {
 
-    display:
-        flex;
+    display: flex;
 
     justify-content:
         space-between;
 
-    align-items:
-        center;
+    align-items: center;
 
-    gap:
-        15px;
+    gap: 15px;
 
-    margin-bottom:
-        20px;
+    margin-bottom: 20px;
 }
 
 
 .panel-header h2 {
 
-    margin:
-        0;
+    margin: 0;
 
-    font-size:
-        20px;
+    font-size: 20px;
 }
 
 
@@ -531,11 +437,9 @@ body {
     margin:
         5px 0 0;
 
-    color:
-        #6b7280;
+    color: #6b7280;
 
-    font-size:
-        13px;
+    font-size: 13px;
 }
 
 
@@ -545,14 +449,12 @@ body {
 
 .cashier-grid {
 
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         1.5fr 1fr;
 
-    gap:
-        20px;
+    gap: 20px;
 }
 
 
@@ -560,10 +462,10 @@ body {
    INPUT
 ===================================================== */
 
-input {
+input,
+select {
 
-    width:
-        100%;
+    width: 100%;
 
     padding:
         10px 12px;
@@ -571,18 +473,18 @@ input {
     border:
         1px solid #d1d5db;
 
-    border-radius:
-        8px;
+    border-radius: 8px;
 
-    outline:
-        none;
+    outline: none;
+
+    background: #ffffff;
 }
 
 
-input:focus {
+input:focus,
+select:focus {
 
-    border-color:
-        #2563eb;
+    border-color: #2563eb;
 
     box-shadow:
         0 0 0 3px
@@ -590,17 +492,11 @@ input:focus {
 }
 
 
-/* =====================================================
-   SEARCH
-===================================================== */
-
 .search {
 
-    width:
-        280px;
+    width: 280px;
 
-    max-width:
-        100%;
+    max-width: 100%;
 }
 
 
@@ -610,8 +506,7 @@ input:focus {
 
 .product-grid {
 
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         repeat(
@@ -619,8 +514,7 @@ input:focus {
             minmax(180px,1fr)
         );
 
-    gap:
-        15px;
+    gap: 15px;
 }
 
 
@@ -629,14 +523,11 @@ input:focus {
     border:
         1px solid #e5e7eb;
 
-    border-radius:
-        10px;
+    border-radius: 10px;
 
-    padding:
-        15px;
+    padding: 15px;
 
-    transition:
-        .2s;
+    transition: .2s;
 }
 
 
@@ -656,41 +547,33 @@ input:focus {
     margin:
         0 0 6px;
 
-    font-size:
-        16px;
+    font-size: 16px;
 }
 
 
 .category {
 
-    color:
-        #6b7280;
+    color: #6b7280;
 
-    font-size:
-        12px;
+    font-size: 12px;
 }
 
 
 .price {
 
-    color:
-        #2563eb;
+    color: #2563eb;
 
-    font-size:
-        18px;
+    font-size: 18px;
 
-    font-weight:
-        bold;
+    font-weight: bold;
 
-    margin-top:
-        12px;
+    margin-top: 12px;
 }
 
 
 .stock {
 
-    font-size:
-        13px;
+    font-size: 13px;
 
     margin:
         8px 0 12px;
@@ -699,11 +582,9 @@ input:focus {
 
 .low {
 
-    color:
-        #dc2626;
+    color: #dc2626;
 
-    font-weight:
-        bold;
+    font-weight: bold;
 }
 
 
@@ -713,50 +594,40 @@ input:focus {
 
 .btn {
 
-    border:
-        none;
+    border: none;
 
-    border-radius:
-        8px;
+    border-radius: 8px;
 
     padding:
         10px 14px;
 
-    cursor:
-        pointer;
+    cursor: pointer;
 
-    font-weight:
-        bold;
+    font-weight: bold;
 }
 
 
 .btn-primary {
 
-    background:
-        #2563eb;
+    background: #2563eb;
 
-    color:
-        white;
+    color: #ffffff;
 }
 
 
 .btn-danger {
 
-    background:
-        #dc2626;
+    background: #dc2626;
 
-    color:
-        white;
+    color: #ffffff;
 }
 
 
 .btn-secondary {
 
-    background:
-        #e5e7eb;
+    background: #e5e7eb;
 
-    color:
-        #111827;
+    color: #111827;
 }
 
 
@@ -765,21 +636,19 @@ input:focus {
     padding:
         7px 10px;
 
-    font-size:
-        12px;
+    font-size: 12px;
 }
 
 
 .btn-large {
 
-    width:
-        100%;
+    width: 100%;
 
-    padding:
-        13px;
+    padding: 13px;
 
-    margin-top:
-        15px;
+    margin-top: 15px;
+
+    font-size: 15px;
 }
 
 
@@ -789,24 +658,19 @@ input:focus {
 
 .cart-list {
 
-    min-height:
-        180px;
+    min-height: 180px;
 
-    max-height:
-        420px;
+    max-height: 420px;
 
-    overflow-y:
-        auto;
+    overflow-y: auto;
 }
 
 
 .empty {
 
-    text-align:
-        center;
+    text-align: center;
 
-    color:
-        #6b7280;
+    color: #6b7280;
 
     padding:
         35px 10px;
@@ -815,23 +679,19 @@ input:focus {
 
 .cart-item {
 
-    display:
-        flex;
+    display: flex;
 
     justify-content:
         space-between;
 
-    align-items:
-        center;
+    align-items: center;
 
-    gap:
-        10px;
+    gap: 10px;
 
     border-bottom:
         1px solid #e5e7eb;
 
-    padding:
-        12px 0;
+    padding: 12px 0;
 }
 
 
@@ -844,43 +704,34 @@ input:focus {
 
 .cart-item small {
 
-    color:
-        #6b7280;
+    color: #6b7280;
 }
 
 
 .qty-controls {
 
-    display:
-        flex;
+    display: flex;
 
-    align-items:
-        center;
+    align-items: center;
 
-    gap:
-        5px;
+    gap: 5px;
 }
 
 
 .qty-controls button {
 
-    width:
-        28px;
+    width: 28px;
 
-    height:
-        28px;
+    height: 28px;
 
     border:
         1px solid #d1d5db;
 
-    background:
-        white;
+    background: #ffffff;
 
-    border-radius:
-        6px;
+    border-radius: 6px;
 
-    cursor:
-        pointer;
+    cursor: pointer;
 }
 
 
@@ -890,11 +741,9 @@ input:focus {
 
 .summary {
 
-    margin-top:
-        15px;
+    margin-top: 15px;
 
-    padding-top:
-        10px;
+    padding-top: 10px;
 
     border-top:
         1px solid #e5e7eb;
@@ -903,8 +752,7 @@ input:focus {
 
 .summary-row {
 
-    display:
-        flex;
+    display: flex;
 
     justify-content:
         space-between;
@@ -916,8 +764,7 @@ input:focus {
 
 .grand-total {
 
-    margin-top:
-        8px;
+    margin-top: 8px;
 
     padding:
         12px 0;
@@ -925,11 +772,9 @@ input:focus {
     border-top:
         1px solid #e5e7eb;
 
-    font-size:
-        20px;
+    font-size: 20px;
 
-    font-weight:
-        bold;
+    font-weight: bold;
 }
 
 
@@ -939,49 +784,114 @@ input:focus {
 
 .payment-section {
 
-    margin-top:
-        10px;
+    margin-top: 12px;
 }
 
 
 .payment-section label {
 
-    display:
-        block;
+    display: block;
 
     margin:
         12px 0 6px;
 
-    font-size:
-        13px;
+    font-size: 13px;
 
-    font-weight:
-        bold;
+    font-weight: bold;
 }
 
 
 .change-box {
 
-    margin-top:
-        12px;
+    margin-top: 12px;
 
-    padding:
-        12px;
+    padding: 12px;
 
-    display:
-        flex;
+    display: flex;
 
     justify-content:
         space-between;
 
-    background:
-        #f0fdf4;
+    background: #f0fdf4;
 
     border:
         1px solid #bbf7d0;
 
-    border-radius:
-        8px;
+    border-radius: 8px;
+}
+
+
+.qris-box {
+
+    margin-top: 15px;
+
+    padding: 18px;
+
+    border:
+        1px solid #dbeafe;
+
+    background: #eff6ff;
+
+    border-radius: 10px;
+
+    text-align: center;
+}
+
+
+.qris-icon {
+
+    font-size: 32px;
+
+    margin-bottom: 8px;
+}
+
+
+.qris-box strong {
+
+    display: block;
+
+    margin-bottom: 8px;
+}
+
+
+.qris-box p {
+
+    margin:
+        0 0 12px;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+.qris-total {
+
+    padding: 10px;
+
+    background: #ffffff;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+}
+
+
+.qris-total strong {
+
+    display: inline;
+
+    margin-left: 5px;
+
+    color: #2563eb;
+}
+
+
+.hidden {
+
+    display: none !important;
 }
 
 
@@ -991,45 +901,37 @@ input:focus {
 
 .table-wrapper {
 
-    overflow-x:
-        auto;
+    overflow-x: auto;
 }
 
 
 table {
 
-    width:
-        100%;
+    width: 100%;
 
-    border-collapse:
-        collapse;
+    border-collapse: collapse;
 }
 
 
 th,
 td {
 
-    padding:
-        12px;
+    padding: 12px;
 
     border-bottom:
         1px solid #e5e7eb;
 
-    text-align:
-        left;
+    text-align: left;
 
-    font-size:
-        14px;
+    font-size: 14px;
 }
 
 
 th {
 
-    background:
-        #f9fafb;
+    background: #f9fafb;
 
-    font-size:
-        13px;
+    font-size: 13px;
 }
 
 
@@ -1039,17 +941,14 @@ th {
 
 .modal {
 
-    position:
-        fixed;
+    position: fixed;
 
-    inset:
-        0;
+    inset: 0;
 
     background:
         rgba(0,0,0,.55);
 
-    display:
-        flex;
+    display: flex;
 
     justify-content:
         center;
@@ -1057,123 +956,96 @@ th {
     align-items:
         center;
 
-    padding:
-        20px;
+    padding: 20px;
 
-    z-index:
-        1000;
+    z-index: 1000;
 }
 
 
 .modal.hidden {
 
-    display:
-        none;
+    display: none;
 }
 
 
 .modal-card {
 
-    width:
-        100%;
+    width: 100%;
 
-    max-width:
-        500px;
+    max-width: 500px;
 
-    max-height:
-        90vh;
+    max-height: 90vh;
 
-    overflow:
-        auto;
+    overflow: auto;
 
-    background:
-        white;
+    background: #ffffff;
 
-    padding:
-        20px;
+    padding: 20px;
 
-    border-radius:
-        12px;
+    border-radius: 12px;
 }
 
 
 .modal-header {
 
-    display:
-        flex;
+    display: flex;
 
     justify-content:
         space-between;
 
-    align-items:
-        center;
+    align-items: center;
 
-    margin-bottom:
-        18px;
+    margin-bottom: 18px;
 }
 
 
 .modal-header h3 {
 
-    margin:
-        0;
+    margin: 0;
 }
 
 
 .icon-button {
 
-    width:
-        35px;
+    width: 35px;
 
-    height:
-        35px;
+    height: 35px;
 
-    border:
-        none;
+    border: none;
 
-    border-radius:
-        7px;
+    border-radius: 7px;
 
-    background:
-        #f3f4f6;
+    background: #f3f4f6;
 
-    font-size:
-        22px;
+    font-size: 22px;
 
-    cursor:
-        pointer;
+    cursor: pointer;
 }
 
 
 .modal-card label {
 
-    display:
-        block;
+    display: block;
 
     margin:
         11px 0 6px;
 
-    font-size:
-        13px;
+    font-size: 13px;
 
-    font-weight:
-        bold;
+    font-weight: bold;
 }
 
 
 .modal-actions {
 
-    display:
-        flex;
+    display: flex;
 
     justify-content:
         flex-end;
 
-    gap:
-        10px;
+    gap: 10px;
 
-    margin-top:
-        20px;
+    margin-top: 20px;
 }
 
 
@@ -1183,61 +1055,109 @@ th {
 
 .receipt {
 
-    background:
-        #f9fafb;
+    background: #f9fafb;
 
     border:
         1px dashed #cbd5e1;
 
-    padding:
-        18px;
+    padding: 18px;
 
     font-family:
         "Courier New",
         monospace;
 
-    font-size:
-        13px;
+    font-size: 13px;
 
-    white-space:
-        pre-wrap;
+    white-space: pre-wrap;
 }
 
 
 /* =====================================================
-   REPORT
+   REKAP
 ===================================================== */
 
 .report-date {
 
-    display:
-        flex;
+    display: flex;
 
-    flex-direction:
-        column;
+    flex-direction: column;
 
-    gap:
-        5px;
+    gap: 5px;
 
-    min-width:
-        180px;
+    min-width: 180px;
 }
 
 
 .report-date label {
 
-    font-size:
-        13px;
+    font-size: 13px;
 
-    font-weight:
-        bold;
+    font-weight: bold;
+}
+
+
+.payment-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap: 15px;
+
+    margin-bottom: 25px;
+}
+
+
+.payment-summary-card {
+
+    padding: 18px;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.payment-summary-card span {
+
+    font-size: 13px;
+
+    color: #6b7280;
+}
+
+
+.payment-summary-card strong {
+
+    font-size: 21px;
+}
+
+
+.cash-summary {
+
+    background: #f0fdf4;
+
+    border:
+        1px solid #bbf7d0;
+}
+
+
+.qris-summary {
+
+    background: #eff6ff;
+
+    border:
+        1px solid #bfdbfe;
 }
 
 
 .report-actions {
 
-    margin-top:
-        20px;
+    margin-top: 20px;
 }
 
 
@@ -1249,8 +1169,7 @@ th {
 
     .cashier-grid {
 
-        grid-template-columns:
-            1fr;
+        grid-template-columns: 1fr;
     }
 
 }
@@ -1267,8 +1186,7 @@ th {
 
     .panel-header {
 
-        flex-direction:
-            column;
+        flex-direction: column;
 
         align-items:
             flex-start;
@@ -1277,8 +1195,7 @@ th {
 
     .search {
 
-        width:
-            100%;
+        width: 100%;
     }
 
 }
@@ -1288,15 +1205,13 @@ th {
 
     .container {
 
-        padding:
-            15px;
+        padding: 15px;
     }
 
 
     .topbar {
 
-        padding:
-            15px;
+        padding: 15px;
 
         flex-direction:
             column;
@@ -1304,15 +1219,13 @@ th {
         align-items:
             flex-start;
 
-        gap:
-            12px;
+        gap: 12px;
     }
 
 
     .topbar-right {
 
-        width:
-            100%;
+        width: 100%;
 
         justify-content:
             space-between;
@@ -1333,10 +1246,16 @@ th {
     }
 
 
+    .payment-summary {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
     .login-card {
 
-        padding:
-            25px;
+        padding: 25px;
     }
 
 }
