@@ -1,7 +1,3 @@
-/* =====================================================
-   KASIRKU
-===================================================== */
-
 const LOGIN_USERNAME = "admin";
 const LOGIN_PASSWORD = "12345";
 
@@ -15,9 +11,9 @@ const TRANSACTIONS_KEY =
     "kasirku_transactions_final_v1";
 
 
-/* =====================================================
+/* =========================================
    DEFAULT PRODUCTS
-===================================================== */
+========================================= */
 
 const defaultProducts = [
 
@@ -132,15 +128,12 @@ const defaultProducts = [
 ];
 
 
-/* =====================================================
-   DATA
-===================================================== */
-
 let products =
     loadStorage(
         PRODUCTS_KEY,
         defaultProducts
     );
+
 
 let transactions =
     loadStorage(
@@ -148,42 +141,22 @@ let transactions =
         []
     );
 
+
 let cart = [];
 
-let editingProductId = null;
+let editingProductId =
+    null;
 
-let currentReceipt = "";
+let currentReceipt =
+    "";
 
 
-/* =====================================================
+/* =========================================
    HELPER
-===================================================== */
+========================================= */
 
 function get(id) {
-
     return document.getElementById(id);
-
-}
-
-
-function on(
-    id,
-    event,
-    handler
-) {
-
-    const element =
-        get(id);
-
-    if (!element) {
-        return;
-    }
-
-    element.addEventListener(
-        event,
-        handler
-    );
-
 }
 
 
@@ -208,25 +181,16 @@ function getToday() {
     const date =
         new Date();
 
-    const year =
-        date.getFullYear();
-
-    const month =
+    return (
+        date.getFullYear() +
+        "-" +
         String(
             date.getMonth() + 1
-        ).padStart(2, "0");
-
-    const day =
+        ).padStart(2, "0") +
+        "-" +
         String(
             date.getDate()
-        ).padStart(2, "0");
-
-    return (
-        year +
-        "-" +
-        month +
-        "-" +
-        day
+        ).padStart(2, "0")
     );
 
 }
@@ -235,27 +199,22 @@ function getToday() {
 function escapeHtml(value) {
 
     return String(value)
-
         .replaceAll(
             "&",
             "&amp;"
         )
-
         .replaceAll(
             "<",
             "&lt;"
         )
-
         .replaceAll(
             ">",
             "&gt;"
         )
-
         .replaceAll(
             '"',
             "&quot;"
         )
-
         .replaceAll(
             "'",
             "&#039;"
@@ -276,12 +235,12 @@ function loadStorage(
                 key
             );
 
+
         if (saved) {
 
             const parsed =
-                JSON.parse(
-                    saved
-                );
+                JSON.parse(saved);
+
 
             if (
                 Array.isArray(
@@ -338,71 +297,56 @@ function saveTransactions() {
 }
 
 
-/* =====================================================
+/* =========================================
    LOGIN
-===================================================== */
+========================================= */
 
 function showLogin() {
 
-    const loginPage =
-        get("loginPage");
+    get(
+        "loginPage"
+    )?.classList.remove(
+        "app-hidden"
+    );
 
-    const appPage =
-        get("appPage");
 
-    if (loginPage) {
-
-        loginPage.style.display =
-            "flex";
-
-    }
-
-    if (appPage) {
-
-        appPage.classList.add(
-            "app-hidden"
-        );
-
-    }
+    get(
+        "appPage"
+    )?.classList.add(
+        "app-hidden"
+    );
 
 }
 
 
 function showApp() {
 
-    const loginPage =
-        get("loginPage");
+    get(
+        "loginPage"
+    )?.classList.add(
+        "app-hidden"
+    );
 
-    const appPage =
-        get("appPage");
 
-    if (loginPage) {
-
-        loginPage.style.display =
-            "none";
-
-    }
-
-    if (appPage) {
-
-        appPage.classList.remove(
-            "app-hidden"
-        );
-
-    }
+    get(
+        "appPage"
+    )?.classList.remove(
+        "app-hidden"
+    );
 
 }
 
 
 function checkLogin() {
 
-    const loggedIn =
+    const login =
         sessionStorage.getItem(
             LOGIN_SESSION_KEY
         );
 
+
     if (
-        loggedIn === "true"
+        login === "true"
     ) {
 
         showApp();
@@ -420,17 +364,23 @@ function handleLogin(event) {
 
     event.preventDefault();
 
+
     const username =
-        get("username")
-            ?.value
-            .trim();
+        get(
+            "username"
+        )?.value.trim();
+
 
     const password =
-        get("password")
-            ?.value;
+        get(
+            "password"
+        )?.value;
+
 
     const error =
-        get("loginError");
+        get(
+            "loginError"
+        );
 
 
     if (
@@ -445,6 +395,7 @@ function handleLogin(event) {
             "true"
         );
 
+
         if (error) {
 
             error.textContent =
@@ -452,13 +403,16 @@ function handleLogin(event) {
 
         }
 
+
         get(
             "loginForm"
         )?.reset();
 
+
         showApp();
 
         renderAll();
+
 
         return;
 
@@ -492,7 +446,9 @@ function logout() {
         LOGIN_SESSION_KEY
     );
 
+
     cart = [];
+
 
     showLogin();
 
@@ -542,20 +498,20 @@ function togglePassword() {
 }
 
 
-/* =====================================================
+/* =========================================
    CLOCK
-===================================================== */
+========================================= */
 
 function updateClock() {
 
     const clock =
         get("clock");
 
+
     if (!clock) {
-
         return;
-
     }
+
 
     clock.textContent =
         new Date().toLocaleString(
@@ -572,9 +528,9 @@ function updateClock() {
 }
 
 
-/* =====================================================
+/* =========================================
    DASHBOARD
-===================================================== */
+========================================= */
 
 function renderDashboard() {
 
@@ -596,10 +552,10 @@ function renderDashboard() {
     const revenue =
         todayTransactions.reduce(
             (
-                sum,
+                total,
                 transaction
             ) =>
-                sum +
+                total +
                 Number(
                     transaction.total ||
                     0
@@ -620,7 +576,9 @@ function renderDashboard() {
 
 
     if (
-        get("statProducts")
+        get(
+            "statProducts"
+        )
     ) {
 
         get(
@@ -632,7 +590,9 @@ function renderDashboard() {
 
 
     if (
-        get("statTransactions")
+        get(
+            "statTransactions"
+        )
     ) {
 
         get(
@@ -644,7 +604,9 @@ function renderDashboard() {
 
 
     if (
-        get("statRevenue")
+        get(
+            "statRevenue"
+        )
     ) {
 
         get(
@@ -658,7 +620,9 @@ function renderDashboard() {
 
 
     if (
-        get("statLowStock")
+        get(
+            "statLowStock"
+        )
     ) {
 
         get(
@@ -671,19 +635,20 @@ function renderDashboard() {
 }
 
 
-/* =====================================================
-   PRODUK DI KASIR
-===================================================== */
+/* =========================================
+   PRODUCTS
+========================================= */
 
 function renderProducts() {
 
     const grid =
-        get("productGrid");
+        get(
+            "productGrid"
+        );
+
 
     if (!grid) {
-
         return;
-
     }
 
 
@@ -700,41 +665,34 @@ function renderProducts() {
 
     const filtered =
         products.filter(
-            product => {
-
-                return (
-
-                    String(
-                        product.name
+            product =>
+                String(
+                    product.name
+                )
+                    .toLowerCase()
+                    .includes(
+                        search
                     )
-                        .toLowerCase()
-                        .includes(
-                            search
-                        )
 
-                    ||
+                ||
 
-                    String(
-                        product.code
+                String(
+                    product.code
+                )
+                    .toLowerCase()
+                    .includes(
+                        search
                     )
-                        .toLowerCase()
-                        .includes(
-                            search
-                        )
 
-                    ||
+                ||
 
-                    String(
-                        product.category
+                String(
+                    product.category
+                )
+                    .toLowerCase()
+                    .includes(
+                        search
                     )
-                        .toLowerCase()
-                        .includes(
-                            search
-                        )
-
-                );
-
-            }
         );
 
 
@@ -822,11 +780,10 @@ function renderProducts() {
                                 btn-primary
                                 btn-small
                             "
-                            onclick="
-                                addToCart(
-                                    '${product.id}'
-                                )
-                            "
+                            data-action="add-product"
+                            data-id="${escapeHtml(
+                                product.id
+                            )}"
                             ${
                                 stock <= 0
                                     ? "disabled"
@@ -850,9 +807,9 @@ function renderProducts() {
 }
 
 
-/* =====================================================
+/* =========================================
    CART
-===================================================== */
+========================================= */
 
 function addToCart(
     productId
@@ -867,9 +824,7 @@ function addToCart(
 
 
     if (!product) {
-
         return;
-
     }
 
 
@@ -892,7 +847,7 @@ function addToCart(
     }
 
 
-    const existing =
+    const item =
         cart.find(
             item =>
                 item.productId ===
@@ -900,10 +855,10 @@ function addToCart(
         );
 
 
-    if (existing) {
+    if (item) {
 
         if (
-            existing.qty >=
+            item.qty >=
             stock
         ) {
 
@@ -915,7 +870,8 @@ function addToCart(
 
         }
 
-        existing.qty += 1;
+
+        item.qty++;
 
     } else {
 
@@ -924,7 +880,8 @@ function addToCart(
             productId:
                 productId,
 
-            qty: 1
+            qty:
+                1
 
         });
 
@@ -938,21 +895,21 @@ function addToCart(
 
 function setQty(
     productId,
-    value
+    rawValue
 ) {
 
     const item =
         cart.find(
-            i =>
-                i.productId ===
+            item =>
+                item.productId ===
                 productId
         );
 
 
     const product =
         products.find(
-            p =>
-                p.id ===
+            product =>
+                product.id ===
                 productId
         );
 
@@ -967,27 +924,24 @@ function setQty(
     }
 
 
+    let quantity =
+        parseInt(
+            rawValue,
+            10
+        );
+
+
     const stock =
         Number(
             product.stock
         ) || 0;
 
 
-    let qty =
-        parseInt(
-            value,
-            10
-        );
-
-
     if (
-        Number.isNaN(qty) ||
-        qty <= 0
+        !Number.isFinite(
+            quantity
+        )
     ) {
-
-        removeFromCart(
-            productId
-        );
 
         return;
 
@@ -995,23 +949,32 @@ function setQty(
 
 
     if (
-        qty > stock
+        quantity < 1
     ) {
 
-        qty = stock;
+        quantity = 1;
+
+    }
+
+
+    if (
+        quantity > stock
+    ) {
+
+        quantity = stock;
 
         alert(
-            `Jumlah ${product.name} dibatasi sesuai stok: ${stock}.`
+            `Jumlah maksimal ${product.name} adalah ${stock}.`
         );
 
     }
 
 
     item.qty =
-        qty;
+        quantity;
 
 
-    renderCart();
+    calculateTotal();
 
 }
 
@@ -1023,13 +986,33 @@ function changeQty(
 
     const item =
         cart.find(
-            i =>
-                i.productId ===
+            item =>
+                item.productId ===
                 productId
         );
 
 
     if (!item) {
+        return;
+    }
+
+
+    let value =
+        Number(
+            item.qty
+        ) +
+        Number(
+            amount
+        );
+
+
+    if (
+        value < 1
+    ) {
+
+        removeFromCart(
+            productId
+        );
 
         return;
 
@@ -1038,9 +1021,11 @@ function changeQty(
 
     setQty(
         productId,
-        item.qty +
-        Number(amount)
+        value
     );
+
+
+    renderCart();
 
 }
 
@@ -1095,13 +1080,13 @@ function clearCart() {
 function renderCart() {
 
     const list =
-        get("cartList");
+        get(
+            "cartList"
+        );
 
 
     if (!list) {
-
         return;
-
     }
 
 
@@ -1131,16 +1116,14 @@ function renderCart() {
 
                 const product =
                     products.find(
-                        p =>
-                            p.id ===
+                        product =>
+                            product.id ===
                             item.productId
                     );
 
 
                 if (!product) {
-
                     return "";
-
                 }
 
 
@@ -1194,12 +1177,10 @@ function renderCart() {
 
                             <button
                                 type="button"
-                                onclick="
-                                    changeQty(
-                                        '${product.id}',
-                                        -1
-                                    )
-                                "
+                                data-action="qty-minus"
+                                data-id="${escapeHtml(
+                                    product.id
+                                )}"
                             >
                                 −
                             </button>
@@ -1211,23 +1192,19 @@ function renderCart() {
                                 min="1"
                                 max="${stock}"
                                 value="${item.qty}"
-                                onchange="
-                                    setQty(
-                                        '${product.id}',
-                                        this.value
-                                    )
-                                "
+                                data-action="qty-input"
+                                data-id="${escapeHtml(
+                                    product.id
+                                )}"
                             >
 
 
                             <button
                                 type="button"
-                                onclick="
-                                    changeQty(
-                                        '${product.id}',
-                                        1
-                                    )
-                                "
+                                data-action="qty-plus"
+                                data-id="${escapeHtml(
+                                    product.id
+                                )}"
                             >
                                 +
                             </button>
@@ -1235,11 +1212,10 @@ function renderCart() {
 
                             <button
                                 type="button"
-                                onclick="
-                                    removeFromCart(
-                                        '${product.id}'
-                                    )
-                                "
+                                data-action="remove-item"
+                                data-id="${escapeHtml(
+                                    product.id
+                                )}"
                             >
                                 ×
                             </button>
@@ -1259,9 +1235,9 @@ function renderCart() {
 }
 
 
-/* =====================================================
-   PEMBAYARAN
-===================================================== */
+/* =========================================
+   PAYMENT
+========================================= */
 
 function updatePaymentMethod() {
 
@@ -1315,13 +1291,14 @@ function updatePaymentMethod() {
 }
 
 
-/* =====================================================
-   HITUNG TOTAL
-===================================================== */
+/* =========================================
+   TOTAL + DISCOUNT PERCENT
+========================================= */
 
 function calculateTotal() {
 
-    let subtotal = 0;
+    let subtotal =
+        0;
 
 
     cart.forEach(
@@ -1329,8 +1306,8 @@ function calculateTotal() {
 
             const product =
                 products.find(
-                    p =>
-                        p.id ===
+                    product =>
+                        product.id ===
                         item.productId
                 );
 
@@ -1351,8 +1328,6 @@ function calculateTotal() {
     );
 
 
-    /* DISKON PERSEN */
-
     let discountPercent =
         Number(
             get(
@@ -1361,32 +1336,20 @@ function calculateTotal() {
         ) || 0;
 
 
-    if (
-        discountPercent < 0
-    ) {
-
-        discountPercent =
-            0;
-
-    }
-
-
-    if (
-        discountPercent > 100
-    ) {
-
-        discountPercent =
-            100;
-
-    }
+    discountPercent =
+        Math.min(
+            100,
+            Math.max(
+                0,
+                discountPercent
+            )
+        );
 
 
     const discount =
         subtotal *
-        (
-            discountPercent /
-            100
-        );
+        discountPercent /
+        100;
 
 
     const total =
@@ -1404,9 +1367,12 @@ function calculateTotal() {
         "CASH";
 
 
-    let payment = 0;
+    let payment =
+        0;
 
-    let change = 0;
+
+    let change =
+        0;
 
 
     if (
@@ -1440,51 +1406,88 @@ function calculateTotal() {
     }
 
 
-    get(
-        "subtotal"
-    ).textContent =
-        formatRupiah(
-            subtotal
-        );
+    if (
+        get("subtotal")
+    ) {
+
+        get(
+            "subtotal"
+        ).textContent =
+            formatRupiah(
+                subtotal
+            );
+
+    }
 
 
-    get(
-        "discountLabel"
-    ).textContent =
-        formatRupiah(
-            discount
-        );
+    if (
+        get("discountLabel")
+    ) {
+
+        get(
+            "discountLabel"
+        ).textContent =
+            formatRupiah(
+                discount
+            );
+
+    }
 
 
-    get(
-        "discountPercentLabel"
-    ).textContent =
-        discountPercent +
-        "%";
+    if (
+        get(
+            "discountPercentLabel"
+        )
+    ) {
+
+        get(
+            "discountPercentLabel"
+        ).textContent =
+            `${discountPercent}%`;
+
+    }
 
 
-    get(
-        "grandTotal"
-    ).textContent =
-        formatRupiah(
-            total
-        );
+    if (
+        get("grandTotal")
+    ) {
+
+        get(
+            "grandTotal"
+        ).textContent =
+            formatRupiah(
+                total
+            );
+
+    }
 
 
-    get(
-        "change"
-    ).textContent =
-        formatRupiah(
-            change
-        );
+    if (
+        get("change")
+    ) {
+
+        get(
+            "change"
+        ).textContent =
+            formatRupiah(
+                change
+            );
+
+    }
 
 
-    get(
-        "qrisTotal"
-    ).textContent =
-        formatRupiah(
-            total
-        );
+    if (
+        get("qrisTotal")
+    ) {
+
+        get(
+            "qrisTotal"
+        ).textContent =
+            formatRupiah(
+                total
+            );
+
+    }
 
 
     return {
@@ -1515,9 +1518,9 @@ function calculateTotal() {
 }
 
 
-/* =====================================================
+/* =========================================
    CHECKOUT
-===================================================== */
+========================================= */
 
 function checkout() {
 
@@ -1538,8 +1541,6 @@ function checkout() {
         calculateTotal();
 
 
-    /* CASH */
-
     if (
         result.method ===
             "CASH" &&
@@ -1556,26 +1557,20 @@ function checkout() {
     }
 
 
-    /* QRIS */
-
     if (
         result.method ===
         "QRIS"
     ) {
 
-        const confirmed =
-            confirm(
+        if (
+            !confirm(
                 "Pastikan pembayaran QRIS sudah diterima.\n\n" +
-                "Total: " +
-                formatRupiah(
+                `Total: ${formatRupiah(
                     result.total
-                ) +
-                "\n\n" +
+                )}\n\n` +
                 "Lanjutkan transaksi?"
-            );
-
-
-        if (!confirmed) {
+            )
+        ) {
 
             return;
 
@@ -1584,16 +1579,14 @@ function checkout() {
     }
 
 
-    /* VALIDASI STOK */
-
     for (
         const item of cart
     ) {
 
         const product =
             products.find(
-                p =>
-                    p.id ===
+                product =>
+                    product.id ===
                     item.productId
             );
 
@@ -1629,16 +1622,14 @@ function checkout() {
     }
 
 
-    /* SIMPAN ITEM */
-
-    const transactionItems =
+    const items =
         cart.map(
             item => {
 
                 const product =
                     products.find(
-                        p =>
-                            p.id ===
+                        product =>
+                            product.id ===
                             item.productId
                     );
 
@@ -1675,15 +1666,13 @@ function checkout() {
         );
 
 
-    /* KURANGI STOK */
-
     cart.forEach(
         item => {
 
             const product =
                 products.find(
-                    p =>
-                        p.id ===
+                    product =>
+                        product.id ===
                         item.productId
                 );
 
@@ -1703,8 +1692,6 @@ function checkout() {
         }
     );
 
-
-    /* TRANSAKSI */
 
     const transaction = {
 
@@ -1738,7 +1725,7 @@ function checkout() {
             result.change,
 
         items:
-            transactionItems
+            items
 
     };
 
@@ -1753,8 +1740,6 @@ function checkout() {
     saveTransactions();
 
 
-    /* RESET */
-
     cart = [];
 
 
@@ -1765,7 +1750,7 @@ function checkout() {
         get(
             "discount"
         ).value =
-            0;
+            "0";
 
     }
 
@@ -1807,9 +1792,9 @@ function checkout() {
 }
 
 
-/* =====================================================
-   STRUK
-===================================================== */
+/* =========================================
+   RECEIPT
+========================================= */
 
 function showReceipt(
     transaction
@@ -1846,8 +1831,7 @@ function showReceipt(
 
     text +=
         `Metode  : ${
-            transaction.paymentMethod ||
-            "CASH"
+            transaction.paymentMethod
         }\n`;
 
 
@@ -1958,9 +1942,9 @@ function showReceipt(
 }
 
 
-/* =====================================================
-   CETAK STRUK
-===================================================== */
+/* =========================================
+   PRINT RECEIPT
+========================================= */
 
 function printReceipt() {
 
@@ -1997,14 +1981,15 @@ function printReceipt() {
 
 
     printWindow.document.write(`
-        <!DOCTYPE html>
 
         <html>
 
         <head>
+
             <title>
                 Struk Kasir
             </title>
+
         </head>
 
         <body>
@@ -2012,7 +1997,6 @@ function printReceipt() {
             <pre
                 style="
                     font-family: monospace;
-                    font-size: 14px;
                     white-space: pre-wrap;
                 "
             >${escapeHtml(
@@ -2020,14 +2004,16 @@ function printReceipt() {
             )}</pre>
 
             <script>
-                window.onload = function() {
-                    window.print();
-                };
+                window.onload =
+                    function() {
+                        window.print();
+                    };
             <\/script>
 
         </body>
 
         </html>
+
     `);
 
 
@@ -2036,18 +2022,17 @@ function printReceipt() {
 }
 
 
-/* =====================================================
-   MODAL PRODUK
-===================================================== */
+/* =========================================
+   PRODUCT MODAL
+========================================= */
 
 function openProductModal(
     product = null
 ) {
 
     editingProductId =
-        product
-            ? product.id
-            : null;
+        product?.id ||
+        null;
 
 
     get(
@@ -2122,10 +2107,6 @@ function closeProductModal() {
 }
 
 
-/* =====================================================
-   SIMPAN PRODUK
-===================================================== */
-
 function saveProduct(
     event
 ) {
@@ -2189,8 +2170,12 @@ function saveProduct(
 
 
     if (
-        Number.isNaN(price) ||
-        Number.isNaN(stock) ||
+        !Number.isFinite(
+            price
+        ) ||
+        !Number.isFinite(
+            stock
+        ) ||
         price < 0 ||
         stock < 0
     ) {
@@ -2209,10 +2194,9 @@ function saveProduct(
             product =>
                 String(
                     product.code
-                )
-                    .toLowerCase() ===
-                code.toLowerCase()
-                &&
+                ).toLowerCase() ===
+                code.toLowerCase() &&
+
                 product.id !==
                 editingProductId
         );
@@ -2305,10 +2289,6 @@ function saveProduct(
 }
 
 
-/* =====================================================
-   EDIT PRODUK
-===================================================== */
-
 function editProduct(
     id
 ) {
@@ -2331,10 +2311,6 @@ function editProduct(
 
 }
 
-
-/* =====================================================
-   DELETE PRODUK
-===================================================== */
 
 function deleteProduct(
     id
@@ -2389,10 +2365,6 @@ function deleteProduct(
 }
 
 
-/* =====================================================
-   PRODUCT TABLE
-===================================================== */
-
 function renderProductTable() {
 
     const table =
@@ -2413,17 +2385,16 @@ function renderProductTable() {
         0
     ) {
 
-        table.innerHTML =
-            `
-                <tr>
-                    <td
-                        colspan="6"
-                        class="empty"
-                    >
-                        Belum ada produk.
-                    </td>
-                </tr>
-            `;
+        table.innerHTML = `
+            <tr>
+                <td
+                    colspan="6"
+                    class="empty"
+                >
+                    Belum ada produk.
+                </td>
+            </tr>
+        `;
 
         return;
 
@@ -2487,11 +2458,10 @@ function renderProductTable() {
                                     btn-secondary
                                     btn-small
                                 "
-                                onclick="
-                                    editProduct(
-                                        '${product.id}'
-                                    )
-                                "
+                                data-action="edit-product"
+                                data-id="${escapeHtml(
+                                    product.id
+                                )}"
                             >
                                 Edit
                             </button>
@@ -2504,11 +2474,10 @@ function renderProductTable() {
                                     btn-danger
                                     btn-small
                                 "
-                                onclick="
-                                    deleteProduct(
-                                        '${product.id}'
-                                    )
-                                "
+                                data-action="delete-product"
+                                data-id="${escapeHtml(
+                                    product.id
+                                )}"
                             >
                                 Hapus
                             </button>
@@ -2525,9 +2494,34 @@ function renderProductTable() {
 }
 
 
-/* =====================================================
+/* =========================================
    RIWAYAT
-===================================================== */
+========================================= */
+
+function viewTransaction(
+    invoice
+) {
+
+    const transaction =
+        transactions.find(
+            transaction =>
+                transaction.invoice ===
+                invoice
+        );
+
+
+    if (
+        transaction
+    ) {
+
+        showReceipt(
+            transaction
+        );
+
+    }
+
+}
+
 
 function renderTransactions() {
 
@@ -2538,28 +2532,24 @@ function renderTransactions() {
 
 
     if (!table) {
-
         return;
-
     }
 
 
     if (
-        transactions.length ===
-        0
+        !transactions.length
     ) {
 
-        table.innerHTML =
-            `
-                <tr>
-                    <td
-                        colspan="8"
-                        class="empty"
-                    >
-                        Belum ada transaksi.
-                    </td>
-                </tr>
-            `;
+        table.innerHTML = `
+            <tr>
+                <td
+                    colspan="8"
+                    class="empty"
+                >
+                    Belum ada transaksi.
+                </td>
+            </tr>
+        `;
 
         return;
 
@@ -2580,7 +2570,6 @@ function renderTransactions() {
                             )}
                         </td>
 
-
                         <td>
                             ${
                                 new Date(
@@ -2591,14 +2580,12 @@ function renderTransactions() {
                             }
                         </td>
 
-
                         <td>
                             ${escapeHtml(
                                 transaction.paymentMethod ||
                                 "CASH"
                             )}
                         </td>
-
 
                         <td>
                             ${
@@ -2607,13 +2594,11 @@ function renderTransactions() {
                             }%
                         </td>
 
-
                         <td>
                             ${formatRupiah(
                                 transaction.total
                             )}
                         </td>
-
 
                         <td>
                             ${formatRupiah(
@@ -2621,13 +2606,11 @@ function renderTransactions() {
                             )}
                         </td>
 
-
                         <td>
                             ${formatRupiah(
                                 transaction.change
                             )}
                         </td>
-
 
                         <td>
 
@@ -2638,11 +2621,10 @@ function renderTransactions() {
                                     btn-primary
                                     btn-small
                                 "
-                                onclick="
-                                    viewTransaction(
-                                        '${transaction.invoice}'
-                                    )
-                                "
+                                data-action="view-transaction"
+                                data-invoice="${escapeHtml(
+                                    transaction.invoice
+                                )}"
                             >
                                 Lihat
                             </button>
@@ -2658,33 +2640,6 @@ function renderTransactions() {
 
 }
 
-
-function viewTransaction(
-    invoice
-) {
-
-    const transaction =
-        transactions.find(
-            transaction =>
-                transaction.invoice ===
-                invoice
-        );
-
-
-    if (transaction) {
-
-        showReceipt(
-            transaction
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   HAPUS RIWAYAT
-===================================================== */
 
 function clearTransactions() {
 
@@ -2741,61 +2696,66 @@ function clearTransactions() {
     }
 
 
-    transactions = [];
+    transactions =
+        [];
 
 
     saveTransactions();
 
     renderAll();
 
-
-    alert(
-        "Semua riwayat berhasil dihapus."
-    );
-
 }
 
 
-/* =====================================================
+/* =========================================
    REKAP
-===================================================== */
+========================================= */
 
 function getDailyData() {
 
-    const selectedDate =
+    const date =
         get(
             "rekapDate"
         )?.value ||
         getToday();
 
 
-    const dailyTransactions =
+    const daily =
         transactions.filter(
             transaction =>
                 String(
                     transaction.date
                 ).startsWith(
-                    selectedDate
+                    date
                 )
         );
 
 
-    let totalItems = 0;
-
-    let totalDiscount = 0;
-
-    let totalRevenue = 0;
-
-    let cashRevenue = 0;
-
-    let qrisRevenue = 0;
+    let totalItems =
+        0;
 
 
-    const productSummary =
+    let totalDiscount =
+        0;
+
+
+    let totalRevenue =
+        0;
+
+
+    let cashRevenue =
+        0;
+
+
+    let qrisRevenue =
+        0;
+
+
+    const productsMap =
         {};
 
 
-    dailyTransactions.forEach(
+    daily.forEach(
         transaction => {
 
             totalDiscount +=
@@ -2839,69 +2799,64 @@ function getDailyData() {
             }
 
 
-            if (
-                Array.isArray(
-                    transaction.items
-                )
-            ) {
+            (
+                transaction.items ||
+                []
+            ).forEach(
+                item => {
 
-                transaction.items.forEach(
-                    item => {
-
-                        const qty =
-                            Number(
-                                item.qty ||
-                                0
-                            );
+                    const qty =
+                        Number(
+                            item.qty ||
+                            0
+                        );
 
 
-                        const itemTotal =
-                            Number(
-                                item.subtotal ||
-                                0
-                            );
+                    const total =
+                        Number(
+                            item.subtotal ||
+                            0
+                        );
 
 
-                        totalItems +=
-                            qty;
+                    totalItems +=
+                        qty;
 
 
-                        if (
-                            !productSummary[
-                                item.name
-                            ]
-                        ) {
-
-                            productSummary[
-                                item.name
-                            ] = {
-
-                                qty:
-                                    0,
-
-                                total:
-                                    0
-
-                            };
-
-                        }
-
-
-                        productSummary[
+                    if (
+                        !productsMap[
                             item.name
-                        ].qty +=
-                            qty;
+                        ]
+                    ) {
 
-
-                        productSummary[
+                        productsMap[
                             item.name
-                        ].total +=
-                            itemTotal;
+                        ] = {
+
+                            qty:
+                                0,
+
+                            total:
+                                0
+
+                        };
 
                     }
-                );
 
-            }
+
+                    productsMap[
+                        item.name
+                    ].qty +=
+                        qty;
+
+
+                    productsMap[
+                        item.name
+                    ].total +=
+                        total;
+
+                }
+            );
 
         }
     );
@@ -2909,46 +2864,34 @@ function getDailyData() {
 
     return {
 
-        selectedDate:
+        date:
+            date,
 
-            selectedDate,
-
-        dailyTransactions:
-
-            dailyTransactions,
+        daily:
+            daily,
 
         totalItems:
-
             totalItems,
 
         totalDiscount:
-
             totalDiscount,
 
         totalRevenue:
-
             totalRevenue,
 
         cashRevenue:
-
             cashRevenue,
 
         qrisRevenue:
-
             qrisRevenue,
 
-        productSummary:
-
-            productSummary
+        productsMap:
+            productsMap
 
     };
 
 }
 
-
-/* =====================================================
-   RENDER REKAP
-===================================================== */
 
 function renderDailyReport() {
 
@@ -2959,9 +2902,7 @@ function renderDailyReport() {
     get(
         "rekapTransaksi"
     ).textContent =
-        data
-            .dailyTransactions
-            .length;
+        data.daily.length;
 
 
     get(
@@ -3010,13 +2951,12 @@ function renderDailyReport() {
 
     const entries =
         Object.entries(
-            data.productSummary
+            data.productsMap
         );
 
 
     if (
-        entries.length ===
-        0
+        !entries.length
     ) {
 
         table.innerHTML =
@@ -3051,7 +2991,12 @@ function renderDailyReport() {
 
     table.innerHTML =
         entries.map(
-            ([name, item]) => {
+            (
+                [
+                    name,
+                    value
+                ]
+            ) => {
 
                 return `
 
@@ -3064,12 +3009,12 @@ function renderDailyReport() {
                         </td>
 
                         <td>
-                            ${item.qty}
+                            ${value.qty}
                         </td>
 
                         <td>
                             ${formatRupiah(
-                                item.total
+                                value.total
                             )}
                         </td>
 
@@ -3083,25 +3028,113 @@ function renderDailyReport() {
 }
 
 
-/* =====================================================
-   EXPORT EXCEL
-===================================================== */
+/* =========================================
+   CETAK REKAP
+========================================= */
 
-function exportRekap() {
+function printDailyReport() {
 
     const data =
         getDailyData();
 
 
-    if (
-        data
-            .dailyTransactions
-            .length ===
-        0
-    ) {
+    let text =
+        "====================================\n";
+
+    text +=
+        "          REKAP PENJUALAN\n";
+
+    text +=
+        "====================================\n";
+
+    text +=
+        `Tanggal         : ${
+            data.date
+        }\n`;
+
+    text +=
+        `Total Transaksi : ${
+            data.daily.length
+        }\n`;
+
+    text +=
+        `Item Terjual    : ${
+            data.totalItems
+        }\n`;
+
+    text +=
+        `Total Diskon    : ${
+            formatRupiah(
+                data.totalDiscount
+            )
+        }\n`;
+
+    text +=
+        `Total Omzet     : ${
+            formatRupiah(
+                data.totalRevenue
+            )
+        }\n`;
+
+    text +=
+        `Omzet Cash      : ${
+            formatRupiah(
+                data.cashRevenue
+            )
+        }\n`;
+
+    text +=
+        `Omzet QRIS      : ${
+            formatRupiah(
+                data.qrisRevenue
+            )
+        }\n`;
+
+    text +=
+        "------------------------------------\n";
+
+    text +=
+        "PRODUK TERJUAL\n";
+
+    text +=
+        "------------------------------------\n";
+
+
+    Object.entries(
+        data.productsMap
+    ).forEach(
+        (
+            [
+                name,
+                value
+            ]
+        ) => {
+
+            text +=
+                `${name} : ${
+                    value.qty
+                } = ${
+                    formatRupiah(
+                        value.total
+                    )
+                }\n`;
+
+        }
+    );
+
+
+    const windowPrint =
+        window.open(
+            "",
+            "_blank",
+            "width=500,height=700"
+        );
+
+
+    if (!windowPrint) {
 
         alert(
-            "Tidak ada transaksi pada tanggal tersebut."
+            "Popup browser diblokir."
         );
 
         return;
@@ -3109,139 +3142,754 @@ function exportRekap() {
     }
 
 
-    let rows = `
+    windowPrint.document.write(`
 
-        <table border="1">
+        <html>
 
-            <tr>
+        <head>
 
-                <th>
-                    No
-                </th>
+            <title>
+                Rekap Penjualan
+            </title>
 
-                <th>
-                    Invoice
-                </th>
+        </head>
 
-                <th>
-                    Tanggal
-                </th>
+        <body>
 
-                <th>
-                    Metode
-                </th>
+            <pre>
+${escapeHtml(text)}
+            </pre>
 
-                <th>
-                    Produk
-                </th>
+            <script>
+                window.onload =
+                    function() {
+                        window.print();
+                    };
+            <\/script>
 
-                <th>
-                    Qty
-                </th>
+        </body>
 
-                <th>
-                    Harga
-                </th>
+        </html>
 
-                <th>
-                    Diskon %
-                </th>
+    `);
 
-                <th>
-                    Diskon Nominal
-                </th>
 
-                <th>
-                    Total Item
-                </th>
+    windowPrint.document.close();
 
-            </tr>
+}
+
+
+/* =========================================
+   EXPORT EXCEL AS REAL XLSX
+   TANPA LIBRARY EXTERNAL
+========================================= */
+
+function xmlEscape(value) {
+
+    return String(value ?? "")
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&apos;"
+        );
+
+}
+
+
+function crc32(bytes) {
+
+    if (
+        !crc32.table
+    ) {
+
+        const table =
+            new Uint32Array(
+                256
+            );
+
+
+        for (
+            let n = 0;
+            n < 256;
+            n++
+        ) {
+
+            let c =
+                n;
+
+
+            for (
+                let k = 0;
+                k < 8;
+                k++
+            ) {
+
+                c =
+                    (
+                        c & 1
+                    )
+
+                        ?
+
+                    (
+                        0xEDB88320 ^
+                        (
+                            c >>> 1
+                        )
+                    )
+
+                        :
+
+                    (
+                        c >>> 1
+                    );
+
+            }
+
+
+            table[n] =
+                c >>> 0;
+
+        }
+
+
+        crc32.table =
+            table;
+
+    }
+
+
+    let c =
+        0xFFFFFFFF;
+
+
+    for (
+        const byte of bytes
+    ) {
+
+        c =
+            crc32.table[
+                (
+                    c ^
+                    byte
+                ) &
+                255
+            ] ^
+            (
+                c >>> 8
+            );
+
+    }
+
+
+    return (
+        c ^
+        0xFFFFFFFF
+    ) >>> 0;
+
+}
+
+
+function u16(number) {
+
+    return new Uint8Array([
+
+        number & 255,
+
+        (
+            number >>>
+            8
+        ) & 255
+
+    ]);
+
+}
+
+
+function u32(number) {
+
+    return new Uint8Array([
+
+        number & 255,
+
+        (
+            number >>>
+            8
+        ) & 255,
+
+        (
+            number >>>
+            16
+        ) & 255,
+
+        (
+            number >>>
+            24
+        ) & 255
+
+    ]);
+
+}
+
+
+function concatBytes(
+    parts
+) {
+
+    let length =
+        0;
+
+
+    parts.forEach(
+        part => {
+            length +=
+                part.length;
+        }
+    );
+
+
+    const result =
+        new Uint8Array(
+            length
+        );
+
+
+    let offset =
+        0;
+
+
+    parts.forEach(
+        part => {
+
+            result.set(
+                part,
+                offset
+            );
+
+            offset +=
+                part.length;
+
+        }
+    );
+
+
+    return result;
+
+}
+
+
+function zipStore(
+    files
+) {
+
+    const encoder =
+        new TextEncoder();
+
+
+    const localFiles = [];
+
+    const centralFiles = [];
+
+
+    let offset =
+        0;
+
+
+    files.forEach(
+        file => {
+
+            const name =
+                encoder.encode(
+                    file.name
+                );
+
+
+            const data =
+                encoder.encode(
+                    file.data
+                );
+
+
+            const checksum =
+                crc32(
+                    data
+                );
+
+
+            const local =
+                concatBytes([
+
+                    new Uint8Array([
+                        0x50,
+                        0x4b,
+                        0x03,
+                        0x04
+                    ]),
+
+                    u16(20),
+
+                    u16(0),
+
+                    u16(0),
+
+                    u16(0),
+
+                    u16(0),
+
+                    u32(checksum),
+
+                    u32(
+                        data.length
+                    ),
+
+                    u32(
+                        data.length
+                    ),
+
+                    u16(
+                        name.length
+                    ),
+
+                    u16(0),
+
+                    name,
+
+                    data
+
+                ]);
+
+
+            localFiles.push(
+                local
+            );
+
+
+            const central =
+                concatBytes([
+
+                    new Uint8Array([
+                        0x50,
+                        0x4b,
+                        0x01,
+                        0x02
+                    ]),
+
+                    u16(20),
+
+                    u16(20),
+
+                    u16(0),
+
+                    u16(0),
+
+                    u16(0),
+
+                    u16(0),
+
+                    u32(checksum),
+
+                    u32(
+                        data.length
+                    ),
+
+                    u32(
+                        data.length
+                    ),
+
+                    u16(
+                        name.length
+                    ),
+
+                    u16(0),
+
+                    u16(0),
+
+                    u16(0),
+
+                    u16(0),
+
+                    u32(0),
+
+                    u32(offset),
+
+                    name
+
+                ]);
+
+
+            centralFiles.push(
+                central
+            );
+
+
+            offset +=
+                local.length;
+
+        }
+    );
+
+
+    const localData =
+        concatBytes(
+            localFiles
+        );
+
+
+    const centralData =
+        concatBytes(
+            centralFiles
+        );
+
+
+    const end =
+        concatBytes([
+
+            new Uint8Array([
+                0x50,
+                0x4b,
+                0x05,
+                0x06
+            ]),
+
+            u16(0),
+
+            u16(0),
+
+            u16(
+                files.length
+            ),
+
+            u16(
+                files.length
+            ),
+
+            u32(
+                centralData.length
+            ),
+
+            u32(
+                localData.length
+            ),
+
+            u16(0)
+
+        ]);
+
+
+    return concatBytes([
+
+        localData,
+
+        centralData,
+
+        end
+
+    ]);
+
+}
+
+
+function xlsxCell(
+    column,
+    row,
+    value
+) {
+
+    const ref =
+        `${column}${row}`;
+
+
+    if (
+        typeof value ===
+        "number" &&
+        Number.isFinite(
+            value
+        )
+    ) {
+
+        return `
+
+            <c
+                r="${ref}"
+                t="n"
+            >
+                <v>
+                    ${value}
+                </v>
+            </c>
+
+        `;
+
+    }
+
+
+    return `
+
+        <c
+            r="${ref}"
+            t="inlineStr"
+        >
+
+            <is>
+
+                <t>
+                    ${xmlEscape(
+                        value
+                    )}
+                </t>
+
+            </is>
+
+        </c>
+
+    `;
+
+}
+
+
+function columnName(
+    number
+) {
+
+    let name =
+        "";
+
+
+    let n =
+        number;
+
+
+    while (
+        n >= 0
+    ) {
+
+        name =
+            String.fromCharCode(
+                65 +
+                (
+                    n %
+                    26
+                )
+            ) +
+            name;
+
+
+        n =
+            Math.floor(
+                n / 26
+            ) -
+            1;
+
+    }
+
+
+    return name;
+
+}
+
+
+function createSheetXml(
+    rows
+) {
+
+    let xml = `
+
+        <?xml version="1.0"
+        encoding="UTF-8"
+        standalone="yes"?>
+
+        <worksheet
+            xmlns="
+            http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+        >
+
+        <sheetData>
 
     `;
 
 
-    let no = 1;
+    rows.forEach(
+        (
+            row,
+            rowIndex
+        ) => {
+
+            const excelRow =
+                rowIndex + 1;
 
 
-    data.dailyTransactions.forEach(
+            xml +=
+                `<row r="${excelRow}">`;
+
+
+            row.forEach(
+                (
+                    value,
+                    columnIndex
+                ) => {
+
+                    xml +=
+                        xlsxCell(
+                            columnName(
+                                columnIndex
+                            ),
+                            excelRow,
+                            value
+                        );
+
+                }
+            );
+
+
+            xml +=
+                "</row>";
+
+        }
+    );
+
+
+    xml +=
+        `
+
+            </sheetData>
+
+        </worksheet>
+
+        `;
+
+
+    return xml;
+
+}
+
+
+function exportRekap() {
+
+    const data =
+        getDailyData();
+
+
+    const rows = [
+
+        [
+            "REKAP PENJUALAN KASIRKU"
+        ],
+
+        [],
+
+        [
+            "Tanggal",
+            data.date
+        ],
+
+        [
+            "Total Transaksi",
+            data.daily.length
+        ],
+
+        [
+            "Item Terjual",
+            data.totalItems
+        ],
+
+        [
+            "Total Diskon",
+            data.totalDiscount
+        ],
+
+        [
+            "Total Omzet",
+            data.totalRevenue
+        ],
+
+        [
+            "Omzet Cash",
+            data.cashRevenue
+        ],
+
+        [
+            "Omzet QRIS",
+            data.qrisRevenue
+        ],
+
+        [],
+
+        [
+            "Invoice",
+            "Tanggal",
+            "Metode",
+            "Produk",
+            "Qty",
+            "Harga",
+            "Diskon %",
+            "Diskon Nominal",
+            "Total Item"
+        ]
+
+    ];
+
+
+    data.daily.forEach(
         transaction => {
 
-            transaction.items.forEach(
+            (
+                transaction.items ||
+                []
+            ).forEach(
                 item => {
 
-                    rows += `
+                    rows.push([
 
-                        <tr>
+                        transaction.invoice,
 
-                            <td>
-                                ${no++}
-                            </td>
+                        new Date(
+                            transaction.date
+                        ).toLocaleString(
+                            "id-ID"
+                        ),
 
-                            <td>
-                                ${escapeHtml(
-                                    transaction.invoice
-                                )}
-                            </td>
+                        transaction.paymentMethod ||
+                            "CASH",
 
-                            <td>
-                                ${
-                                    new Date(
-                                        transaction.date
-                                    ).toLocaleString(
-                                        "id-ID"
-                                    )
-                                }
-                            </td>
+                        item.name,
 
-                            <td>
-                                ${escapeHtml(
-                                    transaction.paymentMethod ||
-                                    "CASH"
-                                )}
-                            </td>
+                        Number(
+                            item.qty
+                        ) || 0,
 
-                            <td>
-                                ${escapeHtml(
-                                    item.name
-                                )}
-                            </td>
+                        Number(
+                            item.price
+                        ) || 0,
 
-                            <td>
-                                ${item.qty}
-                            </td>
+                        `${
+                            transaction.discountPercent ??
+                            0
+                        }%`,
 
-                            <td>
-                                ${item.price}
-                            </td>
+                        Number(
+                            transaction.discount
+                        ) || 0,
 
-                            <td>
-                                ${
-                                    transaction.discountPercent ??
-                                    0
-                                }%
-                            </td>
+                        Number(
+                            item.subtotal
+                        ) || 0
 
-                            <td>
-                                ${
-                                    Number(
-                                        transaction.discount ||
-                                        0
-                                    )
-                                }
-                            </td>
-
-                            <td>
-                                ${
-                                    Number(
-                                        item.subtotal ||
-                                        0
-                                    )
-                                }
-                            </td>
-
-                        </tr>
-
-                    `;
+                    ]);
 
                 }
             );
@@ -3250,162 +3898,193 @@ function exportRekap() {
     );
 
 
-    rows += `
-        </table>
-    `;
+    const sheetXml =
+        createSheetXml(
+            rows
+        );
 
 
-    const summary = `
+    const files = [
 
-        <table border="1">
+        {
+            name:
+                "[Content_Types].xml",
 
-            <tr>
+            data:
+                `
 
-                <th colspan="2">
-                    REKAP PENJUALAN KASIRKU
-                </th>
+                <?xml version="1.0"
+                encoding="UTF-8"
+                standalone="yes"?>
 
-            </tr>
-
-
-            <tr>
-
-                <td>
-                    Tanggal
-                </td>
-
-                <td>
-                    ${data.selectedDate}
-                </td>
-
-            </tr>
-
-
-            <tr>
-
-                <td>
-                    Total Transaksi
-                </td>
-
-                <td>
-                    ${data.dailyTransactions.length}
-                </td>
-
-            </tr>
-
-
-            <tr>
-
-                <td>
-                    Item Terjual
-                </td>
-
-                <td>
-                    ${data.totalItems}
-                </td>
-
-            </tr>
-
-
-            <tr>
-
-                <td>
-                    Total Diskon
-                </td>
-
-                <td>
-                    ${data.totalDiscount}
-                </td>
-
-            </tr>
-
-
-            <tr>
-
-                <td>
-                    Total Omzet
-                </td>
-
-                <td>
-                    ${data.totalRevenue}
-                </td>
-
-            </tr>
-
-
-            <tr>
-
-                <td>
-                    Omzet Cash
-                </td>
-
-                <td>
-                    ${data.cashRevenue}
-                </td>
-
-            </tr>
-
-
-            <tr>
-
-                <td>
-                    Omzet QRIS
-                </td>
-
-                <td>
-                    ${data.qrisRevenue}
-                </td>
-
-            </tr>
-
-        </table>
-
-        <br>
-
-    `;
-
-
-    const html =
-        `
-
-            <!DOCTYPE html>
-
-            <html>
-
-            <head>
-
-                <meta
-                    charset="UTF-8"
+                <Types
+                    xmlns="
+                    http://schemas.openxmlformats.org/package/2006/content-types"
                 >
 
-            </head>
+                    <Default
+                        Extension="rels"
+                        ContentType="
+                        application/vnd.openxmlformats-package.relationships+xml"
+                    />
 
-            <body>
+                    <Default
+                        Extension="xml"
+                        ContentType="
+                        application/xml
+                    "
+                    />
 
-                ${
-                    summary
-                }
+                    <Override
+                        PartName="
+                        /xl/workbook.xml
+                        "
+                        ContentType="
+                        application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml
+                        "
+                    />
 
-                ${
-                    rows
-                }
+                    <Override
+                        PartName="
+                        /xl/worksheets/sheet1.xml
+                        "
+                        ContentType="
+                        application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml
+                        "
+                    />
 
-            </body>
+                </Types>
 
-            </html>
+                `
+        },
 
-        `;
+
+        {
+            name:
+                "_rels/.rels",
+
+            data:
+                `
+
+                <?xml version="1.0"
+                encoding="UTF-8"
+                standalone="yes"?>
+
+                <Relationships
+                    xmlns="
+                    http://schemas.openxmlformats.org/package/2006/relationships"
+                >
+
+                    <Relationship
+                        Id="rId1"
+
+                        Type="
+                        http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument
+                        "
+
+                        Target="xl/workbook.xml"
+                    />
+
+                </Relationships>
+
+                `
+        },
+
+
+        {
+            name:
+                "xl/workbook.xml",
+
+            data:
+                `
+
+                <?xml version="1.0"
+                encoding="UTF-8"
+                standalone="yes"?>
+
+                <workbook
+                    xmlns="
+                    http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+                    "
+
+                    xmlns:r="
+                    http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+                >
+
+                    <sheets>
+
+                        <sheet
+                            name="Rekap"
+                            sheetId="1"
+                            r:id="rId1"
+                        />
+
+                    </sheets>
+
+                </workbook>
+
+                `
+        },
+
+
+        {
+            name:
+                "xl/_rels/workbook.xml.rels",
+
+            data:
+                `
+
+                <?xml version="1.0"
+                encoding="UTF-8"
+                standalone="yes"?>
+
+                <Relationships
+                    xmlns="
+                    http://schemas.openxmlformats.org/package/2006/relationships"
+                >
+
+                    <Relationship
+                        Id="rId1"
+
+                        Type="
+                        http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet
+                        "
+
+                        Target="
+                        worksheets/sheet1.xml
+                        "
+                    />
+
+                </Relationships>
+
+                `
+        },
+
+
+        {
+            name:
+                "xl/worksheets/sheet1.xml",
+
+            data:
+                sheetXml
+
+        }
+
+    ];
+
+
+    const bytes =
+        zipStore(
+            files
+        );
 
 
     const blob =
         new Blob(
-            [
-                "\ufeff" +
-                html
-            ],
+            [bytes],
             {
                 type:
-                    "application/vnd.ms-excel"
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             }
         );
 
@@ -3427,9 +4106,7 @@ function exportRekap() {
 
 
     link.download =
-        "Rekap-Penjualan-" +
-        data.selectedDate +
-        ".xls";
+        `Rekap-Penjualan-${data.date}.xlsx`;
 
 
     document.body.appendChild(
@@ -3443,189 +4120,338 @@ function exportRekap() {
     link.remove();
 
 
-    URL.revokeObjectURL(
-        url
+    setTimeout(
+        () => {
+            URL.revokeObjectURL(
+                url
+            );
+        },
+        1000
     );
 
 }
 
 
-/* =====================================================
-   CETAK REKAP
-===================================================== */
+/* =========================================
+   EVENT HANDLERS
+========================================= */
 
-function printDailyReport() {
+function handleProductGrid(
+    event
+) {
 
-    const data =
-        getDailyData();
-
-
-    let text = "";
-
-
-    text +=
-        "====================================\n";
-
-    text +=
-        "          REKAP PENJUALAN\n";
-
-    text +=
-        "====================================\n";
-
-
-    text +=
-        `Tanggal         : ${
-            data.selectedDate
-        }\n`;
-
-
-    text +=
-        `Total Transaksi : ${
-            data.dailyTransactions.length
-        }\n`;
-
-
-    text +=
-        `Item Terjual    : ${
-            data.totalItems
-        }\n`;
-
-
-    text +=
-        `Total Diskon    : ${
-            formatRupiah(
-                data.totalDiscount
-            )
-        }\n`;
-
-
-    text +=
-        `Total Omzet     : ${
-            formatRupiah(
-                data.totalRevenue
-            )
-        }\n`;
-
-
-    text +=
-        `Omzet Cash      : ${
-            formatRupiah(
-                data.cashRevenue
-            )
-        }\n`;
-
-
-    text +=
-        `Omzet QRIS      : ${
-            formatRupiah(
-                data.qrisRevenue
-            )
-        }\n`;
-
-
-    text +=
-        "------------------------------------\n";
-
-
-    text +=
-        "PRODUK TERJUAL\n";
-
-
-    text +=
-        "------------------------------------\n";
-
-
-    Object.entries(
-        data.productSummary
-    ).forEach(
-        ([name, item]) => {
-
-            text +=
-                `${name} : ${
-                    item.qty
-                } = ${
-                    formatRupiah(
-                        item.total
-                    )
-                }\n`;
-
-        }
-    );
-
-
-    text +=
-        "====================================";
-
-
-    const printWindow =
-        window.open(
-            "",
-            "_blank",
-            "width=500,height=700"
+    const button =
+        event.target.closest(
+            "button[data-action='add-product']"
         );
 
 
-    if (!printWindow) {
-
-        alert(
-            "Popup browser diblokir."
-        );
+    if (
+        !button
+    ) {
 
         return;
 
     }
 
 
-    printWindow.document.write(`
-        <!DOCTYPE html>
-
-        <html>
-
-        <head>
-
-            <title>
-                Rekap Penjualan
-            </title>
-
-        </head>
-
-        <body>
-
-            <pre
-                style="
-                    font-family: monospace;
-                    font-size: 14px;
-                    white-space: pre-wrap;
-                "
-            >${escapeHtml(
-                text
-            )}</pre>
-
-            <script>
-
-                window.onload =
-                    function() {
-
-                        window.print();
-
-                    };
-
-            <\/script>
-
-        </body>
-
-        </html>
-    `);
-
-
-    printWindow.document.close();
+    addToCart(
+        button.dataset.id
+    );
 
 }
 
 
-/* =====================================================
-   TAB
-===================================================== */
+function handleCartClick(
+    event
+) {
+
+    const button =
+        event.target.closest(
+            "button[data-action]"
+        );
+
+
+    if (!button) {
+
+        return;
+
+    }
+
+
+    const id =
+        button.dataset.id;
+
+
+    if (
+        button.dataset.action ===
+        "qty-minus"
+    ) {
+
+        changeQty(
+            id,
+            -1
+        );
+
+    }
+
+
+    if (
+        button.dataset.action ===
+        "qty-plus"
+    ) {
+
+        changeQty(
+            id,
+            1
+        );
+
+    }
+
+
+    if (
+        button.dataset.action ===
+        "remove-item"
+    ) {
+
+        removeFromCart(
+            id
+        );
+
+    }
+
+}
+
+
+function handleCartInput(
+    event
+) {
+
+    const input =
+        event.target.closest(
+            "input[data-action='qty-input']"
+        );
+
+
+    if (!input) {
+
+        return;
+
+    }
+
+
+    const id =
+        input.dataset.id;
+
+
+    const item =
+        cart.find(
+            item =>
+                item.productId ===
+                id
+        );
+
+
+    const product =
+        products.find(
+            product =>
+                product.id ===
+                id
+        );
+
+
+    if (
+        !item ||
+        !product
+    ) {
+
+        return;
+
+    }
+
+
+    const stock =
+        Number(
+            product.stock
+        ) || 0;
+
+
+    let value =
+        parseInt(
+            input.value,
+            10
+        );
+
+
+    if (
+        Number.isFinite(
+            value
+        )
+    ) {
+
+        if (
+            value < 1
+        ) {
+            value = 1;
+        }
+
+        if (
+            value > stock
+        ) {
+            value = stock;
+        }
+
+
+        item.qty =
+            value;
+
+
+        calculateTotal();
+
+
+        const row =
+            input.closest(
+                ".cart-item"
+            );
+
+
+        const text =
+            row?.querySelector(
+                "small"
+            );
+
+
+        if (text) {
+
+            text.textContent =
+                `${formatRupiah(
+                    product.price
+                )} × ${
+                    item.qty
+                } = ${
+                    formatRupiah(
+                        Number(
+                            product.price
+                        ) *
+                        item.qty
+                    )
+                }`;
+
+        }
+
+    }
+
+}
+
+
+function handleCartChange(
+    event
+) {
+
+    const input =
+        event.target.closest(
+            "input[data-action='qty-input']"
+        );
+
+
+    if (!input) {
+
+        return;
+
+    }
+
+
+    const item =
+        cart.find(
+            item =>
+                item.productId ===
+                input.dataset.id
+        );
+
+
+    if (!item) {
+
+        return;
+
+    }
+
+
+    input.value =
+        item.qty;
+
+}
+
+
+function handleProductTable(
+    event
+) {
+
+    const button =
+        event.target.closest(
+            "button[data-action]"
+        );
+
+
+    if (!button) {
+
+        return;
+
+    }
+
+
+    if (
+        button.dataset.action ===
+        "edit-product"
+    ) {
+
+        editProduct(
+            button.dataset.id
+        );
+
+    }
+
+
+    if (
+        button.dataset.action ===
+        "delete-product"
+    ) {
+
+        deleteProduct(
+            button.dataset.id
+        );
+
+    }
+
+}
+
+
+function handleTransactionTable(
+    event
+) {
+
+    const button =
+        event.target.closest(
+            "button[data-action='view-transaction']"
+        );
+
+
+    if (!button) {
+
+        return;
+
+    }
+
+
+    viewTransaction(
+        button.dataset.invoice
+    );
+
+}
+
+
+/* =========================================
+   TABS
+========================================= */
 
 function setupTabs() {
 
@@ -3702,9 +4528,9 @@ function setupTabs() {
 }
 
 
-/* =====================================================
-   SEMUA EVENT
-===================================================== */
+/* =========================================
+   EVENTS
+========================================= */
 
 function setupEvents() {
 
@@ -3714,13 +4540,11 @@ function setupEvents() {
         handleLogin
     );
 
-
     on(
         "togglePassword",
         "click",
         togglePassword
     );
-
 
     on(
         "logoutBtn",
@@ -3728,13 +4552,11 @@ function setupEvents() {
         logout
     );
 
-
     on(
         "searchProduct",
         "input",
         renderProducts
     );
-
 
     on(
         "paymentMethod",
@@ -3742,13 +4564,11 @@ function setupEvents() {
         updatePaymentMethod
     );
 
-
     on(
         "discount",
         "input",
         calculateTotal
     );
-
 
     on(
         "payment",
@@ -3756,20 +4576,17 @@ function setupEvents() {
         calculateTotal
     );
 
-
     on(
         "clearCart",
         "click",
         clearCart
     );
 
-
     on(
         "checkoutBtn",
         "click",
         checkout
     );
-
 
     on(
         "addProductBtn",
@@ -3778,13 +4595,11 @@ function setupEvents() {
             openProductModal()
     );
 
-
     on(
         "closeModal",
         "click",
         closeProductModal
     );
-
 
     on(
         "cancelModal",
@@ -3792,20 +4607,17 @@ function setupEvents() {
         closeProductModal
     );
 
-
     on(
         "productForm",
         "submit",
         saveProduct
     );
 
-
     on(
         "clearTransactions",
         "click",
         clearTransactions
     );
-
 
     on(
         "closeReceipt",
@@ -3818,7 +4630,6 @@ function setupEvents() {
             )
     );
 
-
     on(
         "closeReceiptBtn",
         "click",
@@ -3830,13 +4641,11 @@ function setupEvents() {
             )
     );
 
-
     on(
         "printReceipt",
         "click",
         printReceipt
     );
-
 
     on(
         "rekapDate",
@@ -3844,13 +4653,11 @@ function setupEvents() {
         renderDailyReport
     );
 
-
     on(
         "printRekap",
         "click",
         printDailyReport
     );
-
 
     on(
         "exportRekap",
@@ -3858,12 +4665,81 @@ function setupEvents() {
         exportRekap
     );
 
+    on(
+        "productGrid",
+        "click",
+        handleProductGrid
+    );
+
+    on(
+        "cartList",
+        "click",
+        handleCartClick
+    );
+
+    on(
+        "cartList",
+        "input",
+        handleCartInput
+    );
+
+    on(
+        "cartList",
+        "change",
+        handleCartChange
+    );
+
+    on(
+        "productTableBody",
+        "click",
+        handleProductTable
+    );
+
+    on(
+        "transactionTableBody",
+        "click",
+        handleTransactionTable
+    );
+
 }
 
 
-/* =====================================================
-   RENDER SEMUA
-===================================================== */
+/* =========================================
+   SAFE EVENT BINDING
+========================================= */
+
+function on(
+    id,
+    event,
+    handler
+) {
+
+    const element =
+        get(id);
+
+
+    if (!element) {
+
+        console.warn(
+            `Elemen #${id} tidak ditemukan.`
+        );
+
+        return;
+
+    }
+
+
+    element.addEventListener(
+        event,
+        handler
+    );
+
+}
+
+
+/* =========================================
+   RENDER ALL
+========================================= */
 
 function renderAll() {
 
@@ -3882,9 +4758,9 @@ function renderAll() {
 }
 
 
-/* =====================================================
+/* =========================================
    START
-===================================================== */
+========================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -3937,41 +4813,33 @@ document.addEventListener(
 );
 
 
-/* =====================================================
-   GLOBAL FUNCTIONS
-===================================================== */
+/* =========================================
+   GLOBAL
+========================================= */
 
 window.addToCart =
     addToCart;
 
-
 window.setQty =
     setQty;
-
 
 window.changeQty =
     changeQty;
 
-
 window.removeFromCart =
     removeFromCart;
-
 
 window.editProduct =
     editProduct;
 
-
 window.deleteProduct =
     deleteProduct;
-
 
 window.viewTransaction =
     viewTransaction;
 
-
 window.openProductModal =
     openProductModal;
-
 
 window.closeProductModal =
     closeProductModal;
