@@ -11,19 +11,15 @@
 const LOGIN_USERNAME = "admin";
 const LOGIN_PASSWORD = "12345";
 
-const LOGIN_SESSION_KEY =
-    "kasirku_login_session_v3";
+const LOGIN_SESSION_KEY = "kasirku_login_session_v3";
 
 
 /* =====================================================
    STORAGE
 ===================================================== */
 
-const PRODUCTS_KEY =
-    "kasirku_products_final_v1";
-
-const TRANSACTIONS_KEY =
-    "kasirku_transactions_final_v1";
+const PRODUCTS_KEY = "kasirku_products_final_v1";
+const TRANSACTIONS_KEY = "kasirku_transactions_final_v1";
 
 
 /* =====================================================
@@ -150,6 +146,67 @@ let currentReceipt = "";
 
 
 /* =====================================================
+   HELPER
+===================================================== */
+
+function get(id) {
+    return document.getElementById(id);
+}
+
+
+/*
+   Event helper.
+   Kalau element tidak ada, program tidak berhenti.
+*/
+function on(id, event, handler) {
+    const element = get(id);
+
+    if (!element) {
+        console.warn(`Elemen #${id} tidak ditemukan.`);
+        return;
+    }
+
+    element.addEventListener(event, handler);
+}
+
+
+function formatRupiah(number) {
+    return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0
+    }).format(Number(number) || 0);
+}
+
+
+function getToday() {
+    const date = new Date();
+
+    const year = date.getFullYear();
+
+    const month = String(
+        date.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+        date.getDate()
+    ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+
+function escapeHtml(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+/* =====================================================
    STORAGE
 ===================================================== */
 
@@ -168,8 +225,11 @@ function loadStorage(key, fallback) {
         console.error("Storage error:", error);
     }
 
-    return JSON.parse(JSON.stringify(fallback));
+    return JSON.parse(
+        JSON.stringify(fallback)
+    );
 }
+
 
 function saveProducts() {
     localStorage.setItem(
@@ -178,53 +238,12 @@ function saveProducts() {
     );
 }
 
+
 function saveTransactions() {
     localStorage.setItem(
         TRANSACTIONS_KEY,
         JSON.stringify(transactions)
     );
-}
-
-
-/* =====================================================
-   HELPER
-===================================================== */
-
-function get(id) {
-    return document.getElementById(id);
-}
-
-function formatRupiah(number) {
-    return new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        maximumFractionDigits: 0
-    }).format(Number(number) || 0);
-}
-
-function getToday() {
-    const date = new Date();
-
-    const year = date.getFullYear();
-
-    const month = String(
-        date.getMonth() + 1
-    ).padStart(2, "0");
-
-    const day = String(
-        date.getDate()
-    ).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-}
-
-function escapeHtml(value) {
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
 }
 
 
@@ -245,27 +264,51 @@ function checkLogin() {
     }
 }
 
+
 function showLogin() {
-    get("loginPage").style.display = "flex";
-    get("appPage").classList.add("app-hidden");
+    const loginPage = get("loginPage");
+    const appPage = get("appPage");
+
+    if (loginPage) {
+        loginPage.style.display = "flex";
+    }
+
+    if (appPage) {
+        appPage.classList.add("app-hidden");
+    }
 }
 
+
 function showApp() {
-    get("loginPage").style.display = "none";
-    get("appPage").classList.remove("app-hidden");
+    const loginPage = get("loginPage");
+    const appPage = get("appPage");
+
+    if (loginPage) {
+        loginPage.style.display = "none";
+    }
+
+    if (appPage) {
+        appPage.classList.remove("app-hidden");
+    }
 }
+
 
 function handleLogin(event) {
     event.preventDefault();
 
+    const usernameInput = get("username");
+    const passwordInput = get("password");
+    const error = get("loginError");
+
+    if (!usernameInput || !passwordInput) {
+        return;
+    }
+
     const username =
-        get("username").value.trim();
+        usernameInput.value.trim();
 
     const password =
-        get("password").value;
-
-    const error =
-        get("loginError");
+        passwordInput.value;
 
     if (
         username === LOGIN_USERNAME &&
@@ -276,20 +319,28 @@ function handleLogin(event) {
             "true"
         );
 
-        error.textContent = "";
+        if (error) {
+            error.textContent = "";
+        }
 
-        get("loginForm").reset();
+        const form = get("loginForm");
+
+        if (form) {
+            form.reset();
+        }
 
         showApp();
-
         renderAll();
 
         return;
     }
 
-    error.textContent =
-        "Username atau password salah.";
+    if (error) {
+        error.textContent =
+            "Username atau password salah.";
+    }
 }
+
 
 function logout() {
     if (!confirm("Yakin ingin logout?")) {
@@ -305,9 +356,14 @@ function logout() {
     showLogin();
 }
 
+
 function togglePassword() {
     const password = get("password");
     const button = get("togglePassword");
+
+    if (!password || !button) {
+        return;
+    }
 
     if (password.type === "password") {
         password.type = "text";
@@ -326,7 +382,9 @@ function togglePassword() {
 function updateClock() {
     const clock = get("clock");
 
-    if (!clock) return;
+    if (!clock) {
+        return;
+    }
 
     clock.textContent =
         new Date().toLocaleString(
@@ -359,7 +417,9 @@ function renderDashboard() {
         todayTransactions.reduce(
             (sum, transaction) =>
                 sum +
-                Number(transaction.total || 0),
+                Number(
+                    transaction.total || 0
+                ),
             0
         );
 
@@ -369,44 +429,72 @@ function renderDashboard() {
                 Number(product.stock || 0) <= 5
         ).length;
 
-    get("statProducts").textContent =
-        products.length;
+    const statProducts =
+        get("statProducts");
 
-    get("statTransactions").textContent =
-        todayTransactions.length;
+    const statTransactions =
+        get("statTransactions");
 
-    get("statRevenue").textContent =
-        formatRupiah(revenue);
+    const statRevenue =
+        get("statRevenue");
 
-    get("statLowStock").textContent =
-        lowStock;
+    const statLowStock =
+        get("statLowStock");
+
+    if (statProducts) {
+        statProducts.textContent =
+            products.length;
+    }
+
+    if (statTransactions) {
+        statTransactions.textContent =
+            todayTransactions.length;
+    }
+
+    if (statRevenue) {
+        statRevenue.textContent =
+            formatRupiah(revenue);
+    }
+
+    if (statLowStock) {
+        statLowStock.textContent =
+            lowStock;
+    }
 }
 
 
 /* =====================================================
-   PRODUK DI KASIR
+   PRODUK KASIR
 ===================================================== */
 
 function renderProducts() {
     const grid = get("productGrid");
 
+    if (!grid) {
+        return;
+    }
+
+    const searchInput =
+        get("searchProduct");
+
     const search =
-        get("searchProduct")
-            .value
-            .trim()
-            .toLowerCase();
+        searchInput
+            ? searchInput.value
+                .trim()
+                .toLowerCase()
+            : "";
 
     const filtered =
         products.filter(product =>
-            product.name
+            String(product.name)
                 .toLowerCase()
                 .includes(search)
             ||
-            product.code
+            String(product.code)
                 .toLowerCase()
                 .includes(search)
             ||
-            product.category
+            String(product.category)
                 .toLowerCase()
                 .includes(search)
         );
@@ -417,48 +505,64 @@ function renderProducts() {
                 Produk tidak ditemukan.
             </div>
         `;
+
         return;
     }
 
     grid.innerHTML =
-        filtered.map(product => `
-            <div class="product-card">
+        filtered.map(product => {
 
-                <h3>
-                    ${escapeHtml(product.name)}
-                </h3>
+            const stock =
+                Number(product.stock) || 0;
 
-                <div class="category">
-                    ${escapeHtml(product.code)}
-                    ·
-                    ${escapeHtml(product.category)}
+            return `
+                <div class="product-card">
+
+                    <h3>
+                        ${escapeHtml(
+                            product.name
+                        )}
+                    </h3>
+
+                    <div class="category">
+                        ${escapeHtml(
+                            product.code
+                        )}
+                        ·
+                        ${escapeHtml(
+                            product.category
+                        )}
+                    </div>
+
+                    <div class="price">
+                        ${formatRupiah(
+                            product.price
+                        )}
+                    </div>
+
+                    <div class="
+                        stock
+                        ${stock <= 5 ? "low" : ""}
+                    ">
+                        Stok: ${stock}
+                    </div>
+
+                    <button
+                        class="btn btn-primary btn-small"
+                        type="button"
+                        onclick="addToCart('${product.id}')"
+                        ${stock <= 0 ? "disabled" : ""}
+                    >
+                        ${
+                            stock <= 0
+                                ? "Stok Habis"
+                                : "Tambah"
+                        }
+                    </button>
+
                 </div>
-
-                <div class="price">
-                    ${formatRupiah(product.price)}
-                </div>
-
-                <div class="
-                    stock
-                    ${product.stock <= 5 ? "low" : ""}
-                ">
-                    Stok: ${product.stock}
-                </div>
-
-                <button
-                    class="btn btn-primary btn-small"
-                    onclick="addToCart('${product.id}')"
-                    ${product.stock <= 0 ? "disabled" : ""}
-                >
-                    ${
-                        product.stock <= 0
-                            ? "Stok Habis"
-                            : "Tambah"
-                    }
-                </button>
-
-            </div>
-        `).join("");
+            `;
+        }).join("");
 }
 
 
@@ -473,9 +577,14 @@ function addToCart(productId) {
                 product.id === productId
         );
 
-    if (!product) return;
+    if (!product) {
+        return;
+    }
 
-    if (product.stock <= 0) {
+    const stock =
+        Number(product.stock) || 0;
+
+    if (stock <= 0) {
         alert("Stok produk habis.");
         return;
     }
@@ -489,10 +598,11 @@ function addToCart(productId) {
     if (existing) {
 
         if (
-            existing.qty >=
-            Number(product.stock)
+            existing.qty >= stock
         ) {
-            alert("Jumlah melebihi stok.");
+            alert(
+                "Jumlah melebihi stok."
+            );
             return;
         }
 
@@ -501,7 +611,7 @@ function addToCart(productId) {
     } else {
 
         cart.push({
-            productId: productId,
+            productId,
             qty: 1
         });
     }
@@ -513,6 +623,10 @@ function addToCart(productId) {
 
 function renderCart() {
     const list = get("cartList");
+
+    if (!list) {
+        return;
+    }
 
     if (!cart.length) {
 
@@ -548,7 +662,6 @@ function renderCart() {
                 <div class="cart-item">
 
                     <div>
-
                         <h4>
                             ${escapeHtml(
                                 product.name
@@ -566,18 +679,13 @@ function renderCart() {
                                 itemTotal
                             )}
                         </small>
-
                     </div>
 
                     <div class="qty-controls">
 
                         <button
-                            onclick="
-                                changeQty(
-                                    '${product.id}',
-                                    -1
-                                )
-                            "
+                            type="button"
+                            onclick="changeQty('${product.id}', -1)"
                         >
                             -
                         </button>
@@ -587,22 +695,15 @@ function renderCart() {
                         </strong>
 
                         <button
-                            onclick="
-                                changeQty(
-                                    '${product.id}',
-                                    1
-                                )
-                            "
+                            type="button"
+                            onclick="changeQty('${product.id}', 1)"
                         >
                             +
                         </button>
 
                         <button
-                            onclick="
-                                removeFromCart(
-                                    '${product.id}'
-                                )
-                            "
+                            type="button"
+                            onclick="removeFromCart('${product.id}')"
                         >
                             ×
                         </button>
@@ -611,7 +712,6 @@ function renderCart() {
 
                 </div>
             `;
-
         }).join("");
 
     calculateTotal();
@@ -642,16 +742,20 @@ function changeQty(productId, amount) {
         return;
     }
 
-    if (
-        item.qty >
-        Number(product.stock)
-    ) {
-        item.qty =
-            Number(product.stock);
+    const stock =
+        Number(product.stock) || 0;
+
+    if (item.qty > stock) {
+        item.qty = stock;
 
         alert(
             "Jumlah melebihi stok tersedia."
         );
+    }
+
+    if (item.qty <= 0) {
+        removeFromCart(productId);
+        return;
     }
 
     renderCart();
@@ -696,9 +800,15 @@ function clearCart() {
 ===================================================== */
 
 function updatePaymentMethod() {
+    const methodElement =
+        get("paymentMethod");
+
+    if (!methodElement) {
+        return;
+    }
 
     const method =
-        get("paymentMethod").value;
+        methodElement.value;
 
     const cashArea =
         get("cashPaymentArea");
@@ -708,13 +818,23 @@ function updatePaymentMethod() {
 
     if (method === "CASH") {
 
-        cashArea.classList.remove("hidden");
-        qrisArea.classList.add("hidden");
+        cashArea?.classList.remove(
+            "hidden"
+        );
+
+        qrisArea?.classList.add(
+            "hidden"
+        );
 
     } else {
 
-        cashArea.classList.add("hidden");
-        qrisArea.classList.remove("hidden");
+        cashArea?.classList.add(
+            "hidden"
+        );
+
+        qrisArea?.classList.remove(
+            "hidden"
+        );
     }
 
     calculateTotal();
@@ -726,7 +846,6 @@ function updatePaymentMethod() {
 ===================================================== */
 
 function calculateTotal() {
-
     let subtotal = 0;
 
     for (const item of cart) {
@@ -739,30 +858,27 @@ function calculateTotal() {
             );
 
         if (product) {
-
             subtotal +=
                 Number(product.price) *
                 Number(item.qty);
-
         }
     }
 
+    const discountInput =
+        get("discount");
 
     let discount =
         Number(
-            get("discount").value
+            discountInput?.value
         ) || 0;
-
 
     if (discount < 0) {
         discount = 0;
     }
 
-
     if (discount > subtotal) {
         discount = subtotal;
     }
-
 
     const total =
         Math.max(
@@ -770,20 +886,25 @@ function calculateTotal() {
             subtotal - discount
         );
 
+    const methodElement =
+        get("paymentMethod");
 
     const method =
-        get("paymentMethod").value;
-
+        methodElement
+            ? methodElement.value
+            : "CASH";
 
     let payment = 0;
     let change = 0;
 
-
     if (method === "CASH") {
+
+        const paymentInput =
+            get("payment");
 
         payment =
             Number(
-                get("payment").value
+                paymentInput?.value
             ) || 0;
 
         change =
@@ -794,39 +915,57 @@ function calculateTotal() {
 
     } else {
 
-        /*
-         * QRIS dianggap pembayaran
-         * tepat sesuai total.
-         */
-
         payment = total;
         change = 0;
     }
 
+    const subtotalElement =
+        get("subtotal");
 
-    get("subtotal").textContent =
-        formatRupiah(subtotal);
+    const discountLabel =
+        get("discountLabel");
 
-    get("discountLabel").textContent =
-        formatRupiah(discount);
+    const grandTotal =
+        get("grandTotal");
 
-    get("grandTotal").textContent =
-        formatRupiah(total);
+    const changeElement =
+        get("change");
 
-    get("change").textContent =
-        formatRupiah(change);
+    const qrisTotal =
+        get("qrisTotal");
 
-    get("qrisTotal").textContent =
-        formatRupiah(total);
+    if (subtotalElement) {
+        subtotalElement.textContent =
+            formatRupiah(subtotal);
+    }
 
+    if (discountLabel) {
+        discountLabel.textContent =
+            formatRupiah(discount);
+    }
+
+    if (grandTotal) {
+        grandTotal.textContent =
+            formatRupiah(total);
+    }
+
+    if (changeElement) {
+        changeElement.textContent =
+            formatRupiah(change);
+    }
+
+    if (qrisTotal) {
+        qrisTotal.textContent =
+            formatRupiah(total);
+    }
 
     return {
-        subtotal: subtotal,
-        discount: discount,
-        total: total,
-        payment: payment,
-        change: change,
-        method: method
+        subtotal,
+        discount,
+        total,
+        payment,
+        change,
+        method
     };
 }
 
@@ -836,33 +975,25 @@ function calculateTotal() {
 ===================================================== */
 
 function checkout() {
-
     if (!cart.length) {
-        alert("Keranjang masih kosong.");
+        alert(
+            "Keranjang masih kosong."
+        );
         return;
     }
 
-
     const result =
         calculateTotal();
-
-
-    /* CASH */
 
     if (
         result.method === "CASH" &&
         result.payment < result.total
     ) {
-
         alert(
             "Uang pembayaran masih kurang."
         );
-
         return;
     }
-
-
-    /* QRIS */
 
     if (result.method === "QRIS") {
 
@@ -870,7 +1001,9 @@ function checkout() {
             confirm(
                 "Pastikan pembayaran QRIS sudah diterima.\n\n" +
                 "Total: " +
-                formatRupiah(result.total) +
+                formatRupiah(
+                    result.total
+                ) +
                 "\n\n" +
                 "Lanjutkan transaksi?"
             );
@@ -879,7 +1012,6 @@ function checkout() {
             return;
         }
     }
-
 
     /* VALIDASI STOK */
 
@@ -893,7 +1025,9 @@ function checkout() {
             );
 
         if (!product) {
-            alert("Produk tidak ditemukan.");
+            alert(
+                "Produk tidak ditemukan."
+            );
             return;
         }
 
@@ -901,15 +1035,12 @@ function checkout() {
             Number(item.qty) >
             Number(product.stock)
         ) {
-
             alert(
                 `Stok ${product.name} tidak mencukupi.`
             );
-
             return;
         }
     }
-
 
     /* KURANGI STOK */
 
@@ -922,19 +1053,18 @@ function checkout() {
                     item.productId
             );
 
-        product.stock =
-            Number(product.stock) -
-            Number(item.qty);
+        if (product) {
+            product.stock =
+                Number(product.stock) -
+                Number(item.qty);
+        }
     });
 
-
-    /* BUAT TRANSAKSI */
+    /* TRANSAKSI */
 
     const transaction = {
-
         invoice:
-            "INV-" +
-            Date.now(),
+            "INV-" + Date.now(),
 
         date:
             new Date().toISOString(),
@@ -968,7 +1098,6 @@ function checkout() {
                     );
 
                 return {
-
                     code:
                         product.code,
 
@@ -981,45 +1110,57 @@ function checkout() {
                         ),
 
                     qty:
-                        Number(
-                            item.qty
-                        ),
+                        Number(item.qty),
 
                     subtotal:
                         Number(
                             product.price
                         ) *
-                        Number(
-                            item.qty
-                        )
+                        Number(item.qty)
                 };
             })
     };
-
 
     transactions.unshift(
         transaction
     );
 
-
     saveProducts();
     saveTransactions();
 
-
-    /* RESET CART */
+    /* RESET */
 
     cart = [];
 
-    get("discount").value = 0;
-    get("payment").value = "";
+    const discountInput =
+        get("discount");
 
-    get("paymentMethod").value = "CASH";
+    const paymentInput =
+        get("payment");
+
+    if (discountInput) {
+        discountInput.value = 0;
+    }
+
+    if (paymentInput) {
+        paymentInput.value = "";
+    }
+
+    const paymentMethod =
+        get("paymentMethod");
+
+    if (paymentMethod) {
+        paymentMethod.value =
+            "CASH";
+    }
 
     updatePaymentMethod();
 
     renderAll();
 
-    showReceipt(transaction);
+    showReceipt(
+        transaction
+    );
 }
 
 
@@ -1028,7 +1169,6 @@ function checkout() {
 ===================================================== */
 
 function showReceipt(transaction) {
-
     const method =
         transaction.paymentMethod ||
         "CASH";
@@ -1045,9 +1185,7 @@ function showReceipt(transaction) {
         "================================\n";
 
     text +=
-        `Invoice : ${
-            transaction.invoice
-        }\n`;
+        `Invoice : ${transaction.invoice}\n`;
 
     text +=
         `Tanggal : ${
@@ -1062,23 +1200,18 @@ function showReceipt(transaction) {
     text +=
         "--------------------------------\n";
 
+    transaction.items.forEach(item => {
 
-    transaction.items.forEach(
-        item => {
+        text +=
+            `${item.name}\n`;
 
-            text +=
-                `${item.name}\n`;
-
-            text +=
-                `${item.qty} x ${
-                    formatRupiah(item.price)
-                } = ${
-                    formatRupiah(item.subtotal)
-                }\n`;
-
-        }
-    );
-
+        text +=
+            `${item.qty} x ${
+                formatRupiah(item.price)
+            } = ${
+                formatRupiah(item.subtotal)
+            }\n`;
+    });
 
     text +=
         "--------------------------------\n";
@@ -1127,22 +1260,24 @@ function showReceipt(transaction) {
     text +=
         "================================";
 
+    currentReceipt = text;
 
-    currentReceipt =
-        text;
+    const receiptContent =
+        get("receiptContent");
 
+    const receiptModal =
+        get("receiptModal");
 
-    get(
-        "receiptContent"
-    ).textContent =
-        text;
+    if (receiptContent) {
+        receiptContent.textContent =
+            text;
+    }
 
-
-    get(
-        "receiptModal"
-    ).classList.remove(
-        "hidden"
-    );
+    if (receiptModal) {
+        receiptModal.classList.remove(
+            "hidden"
+        );
+    }
 }
 
 
@@ -1151,6 +1286,12 @@ function showReceipt(transaction) {
 ===================================================== */
 
 function printReceipt() {
+    if (!currentReceipt) {
+        alert(
+            "Belum ada struk yang dapat dicetak."
+        );
+        return;
+    }
 
     const printWindow =
         window.open(
@@ -1159,30 +1300,26 @@ function printReceipt() {
             "width=400,height=650"
         );
 
-
     if (!printWindow) {
-
         alert(
             "Popup browser diblokir."
         );
-
         return;
     }
 
-
     printWindow.document.write(`
+        <!DOCTYPE html>
         <html>
-
         <head>
             <title>Struk Kasir</title>
         </head>
 
         <body>
-
             <pre
                 style="
                     font-family: monospace;
                     font-size: 14px;
+                    white-space: pre-wrap;
                 "
             >${escapeHtml(
                 currentReceipt
@@ -1195,7 +1332,6 @@ function printReceipt() {
             <\/script>
 
         </body>
-
         </html>
     `);
 
@@ -1208,10 +1344,12 @@ function printReceipt() {
 ===================================================== */
 
 function renderProductTable() {
-
     const table =
         get("productTableBody");
 
+    if (!table) {
+        return;
+    }
 
     if (!products.length) {
 
@@ -1229,75 +1367,80 @@ function renderProductTable() {
         return;
     }
 
-
     table.innerHTML =
-        products.map(product => `
+        products.map(product => {
 
-            <tr>
+            const stock =
+                Number(product.stock) || 0;
 
-                <td>
-                    ${escapeHtml(product.code)}
-                </td>
+            return `
+                <tr>
 
-                <td>
-                    ${escapeHtml(product.name)}
-                </td>
+                    <td>
+                        ${escapeHtml(
+                            product.code
+                        )}
+                    </td>
 
-                <td>
-                    ${escapeHtml(product.category)}
-                </td>
+                    <td>
+                        ${escapeHtml(
+                            product.name
+                        )}
+                    </td>
 
-                <td>
-                    ${formatRupiah(product.price)}
-                </td>
+                    <td>
+                        ${escapeHtml(
+                            product.category
+                        )}
+                    </td>
 
-                <td
-                    class="${
-                        product.stock <= 5
-                            ? "low"
-                            : ""
-                    }"
-                >
-                    ${product.stock}
-                </td>
+                    <td>
+                        ${formatRupiah(
+                            product.price
+                        )}
+                    </td>
 
-                <td>
-
-                    <button
-                        class="
-                            btn
-                            btn-secondary
-                            btn-small
-                        "
-                        onclick="
-                            editProduct(
-                                '${product.id}'
-                            )
-                        "
+                    <td
+                        class="${
+                            stock <= 5
+                                ? "low"
+                                : ""
+                        }"
                     >
-                        Edit
-                    </button>
+                        ${stock}
+                    </td>
 
-                    <button
-                        class="
-                            btn
-                            btn-danger
-                            btn-small
-                        "
-                        onclick="
-                            deleteProduct(
-                                '${product.id}'
-                            )
-                        "
-                    >
-                        Hapus
-                    </button>
+                    <td>
 
-                </td>
+                        <button
+                            type="button"
+                            class="
+                                btn
+                                btn-secondary
+                                btn-small
+                            "
+                            onclick="editProduct('${product.id}')"
+                        >
+                            Edit
+                        </button>
 
-            </tr>
+                        <button
+                            type="button"
+                            class="
+                                btn
+                                btn-danger
+                                btn-small
+                            "
+                            onclick="deleteProduct('${product.id}')"
+                        >
+                            Hapus
+                        </button>
 
-        `).join("");
+                    </td>
+
+                </tr>
+            `;
+        }).join("");
 }
 
 
@@ -1306,48 +1449,88 @@ function renderProductTable() {
 ===================================================== */
 
 function openProductModal(product = null) {
-
     editingProductId =
         product
             ? product.id
             : null;
 
+    const modalTitle =
+        get("modalTitle");
 
-    get("modalTitle").textContent =
-        product
-            ? "Edit Produk"
-            : "Tambah Produk";
+    const code =
+        get("productCode");
 
+    const name =
+        get("productName");
 
-    get("productCode").value =
-        product?.code || "";
+    const category =
+        get("productCategory");
 
-    get("productName").value =
-        product?.name || "";
+    const price =
+        get("productPrice");
 
-    get("productCategory").value =
-        product?.category || "";
+    const stock =
+        get("productStock");
 
-    get("productPrice").value =
-        product?.price ?? "";
+    if (modalTitle) {
+        modalTitle.textContent =
+            product
+                ? "Edit Produk"
+                : "Tambah Produk";
+    }
 
-    get("productStock").value =
-        product?.stock ?? "";
+    if (code) {
+        code.value =
+            product?.code || "";
+    }
 
+    if (name) {
+        name.value =
+            product?.name || "";
+    }
 
-    get("productModal")
-        .classList
-        .remove("hidden");
+    if (category) {
+        category.value =
+            product?.category || "";
+    }
+
+    if (price) {
+        price.value =
+            product?.price ?? "";
+    }
+
+    if (stock) {
+        stock.value =
+            product?.stock ?? "";
+    }
+
+    const modal =
+        get("productModal");
+
+    if (modal) {
+        modal.classList.remove(
+            "hidden"
+        );
+    }
 }
 
 
 function closeProductModal() {
+    const modal =
+        get("productModal");
 
-    get("productModal")
-        .classList
-        .add("hidden");
+    const form =
+        get("productForm");
 
-    get("productForm").reset();
+    if (modal) {
+        modal.classList.add(
+            "hidden"
+        );
+    }
+
+    if (form) {
+        form.reset();
+    }
 
     editingProductId = null;
 }
@@ -1358,89 +1541,95 @@ function closeProductModal() {
 ===================================================== */
 
 function saveProduct(event) {
-
     event.preventDefault();
 
+    const codeElement =
+        get("productCode");
+
+    const nameElement =
+        get("productName");
+
+    const categoryElement =
+        get("productCategory");
+
+    const priceElement =
+        get("productPrice");
+
+    const stockElement =
+        get("productStock");
+
+    if (
+        !codeElement ||
+        !nameElement ||
+        !categoryElement ||
+        !priceElement ||
+        !stockElement
+    ) {
+        alert(
+            "Form produk tidak lengkap."
+        );
+        return;
+    }
 
     const code =
-        get("productCode")
-            .value
-            .trim();
-
+        codeElement.value.trim();
 
     const name =
-        get("productName")
-            .value
-            .trim();
-
+        nameElement.value.trim();
 
     const category =
-        get("productCategory")
-            .value
-            .trim();
-
+        categoryElement.value.trim();
 
     const price =
         Number(
-            get("productPrice")
-                .value
+            priceElement.value
         );
-
 
     const stock =
         Number(
-            get("productStock")
-                .value
+            stockElement.value
         );
-
 
     if (
         !code ||
         !name ||
         !category
     ) {
-
         alert(
             "Semua data produk wajib diisi."
         );
-
         return;
     }
 
-
     if (
+        Number.isNaN(price) ||
+        Number.isNaN(stock) ||
         price < 0 ||
         stock < 0
     ) {
-
         alert(
             "Harga dan stok tidak boleh negatif."
         );
-
         return;
     }
-
 
     const duplicate =
         products.find(
             product =>
-                product.code.toLowerCase() ===
-                    code.toLowerCase()
+                String(product.code)
+                    .toLowerCase() ===
+                code.toLowerCase()
                 &&
                 product.id !==
-                    editingProductId
+                editingProductId
         );
 
-
     if (duplicate) {
-
         alert(
             "Kode produk sudah digunakan."
         );
-
         return;
     }
-
 
     if (editingProductId) {
 
@@ -1451,13 +1640,9 @@ function saveProduct(event) {
                     editingProductId
             );
 
-
         if (index !== -1) {
-
             products[index] = {
-
                 ...products[index],
-
                 code,
                 name,
                 category,
@@ -1469,10 +1654,8 @@ function saveProduct(event) {
     } else {
 
         products.push({
-
             id:
-                "P-" +
-                Date.now(),
+                "P-" + Date.now(),
 
             code,
             name,
@@ -1481,7 +1664,6 @@ function saveProduct(event) {
             stock
         });
     }
-
 
     saveProducts();
 
@@ -1496,7 +1678,6 @@ function saveProduct(event) {
 ===================================================== */
 
 function editProduct(id) {
-
     const product =
         products.find(
             product =>
@@ -1504,7 +1685,9 @@ function editProduct(id) {
         );
 
     if (product) {
-        openProductModal(product);
+        openProductModal(
+            product
+        );
     }
 }
 
@@ -1514,7 +1697,6 @@ function editProduct(id) {
 ===================================================== */
 
 function deleteProduct(id) {
-
     const product =
         products.find(
             product =>
@@ -1525,7 +1707,6 @@ function deleteProduct(id) {
         return;
     }
 
-
     if (
         !confirm(
             `Yakin ingin menghapus ${product.name}?`
@@ -1534,20 +1715,17 @@ function deleteProduct(id) {
         return;
     }
 
-
     products =
         products.filter(
             product =>
                 product.id !== id
         );
 
-
     cart =
         cart.filter(
             item =>
                 item.productId !== id
         );
-
 
     saveProducts();
 
@@ -1556,16 +1734,16 @@ function deleteProduct(id) {
 
 
 /* =====================================================
-   RIWAYAT
+   RIWAYAT TRANSAKSI
 ===================================================== */
 
 function renderTransactions() {
-
     const table =
-        get(
-            "transactionTableBody"
-        );
+        get("transactionTableBody");
 
+    if (!table) {
+        return;
+    }
 
     if (!transactions.length) {
 
@@ -1582,7 +1760,6 @@ function renderTransactions() {
 
         return;
     }
-
 
     table.innerHTML =
         transactions.map(
@@ -1613,47 +1790,40 @@ function renderTransactions() {
 
                         <td>
                             <strong>
-                                ${method}
+                                ${escapeHtml(
+                                    method
+                                )}
                             </strong>
                         </td>
 
                         <td>
-                            ${
-                                formatRupiah(
-                                    transaction.total
-                                )
-                            }
+                            ${formatRupiah(
+                                transaction.total
+                            )}
                         </td>
 
                         <td>
-                            ${
-                                formatRupiah(
-                                    transaction.payment
-                                )
-                            }
+                            ${formatRupiah(
+                                transaction.payment
+                            )}
                         </td>
 
                         <td>
-                            ${
-                                formatRupiah(
-                                    transaction.change
-                                )
-                            }
+                            ${formatRupiah(
+                                transaction.change
+                            )}
                         </td>
 
                         <td>
 
                             <button
+                                type="button"
                                 class="
                                     btn
                                     btn-primary
                                     btn-small
                                 "
-                                onclick="
-                                    viewTransaction(
-                                        '${transaction.invoice}'
-                                    )
-                                "
+                                onclick="viewTransaction('${transaction.invoice}')"
                             >
                                 Lihat
                             </button>
@@ -1668,7 +1838,6 @@ function renderTransactions() {
 
 
 function viewTransaction(invoice) {
-
     const transaction =
         transactions.find(
             transaction =>
@@ -1676,78 +1845,65 @@ function viewTransaction(invoice) {
                 invoice
         );
 
-
     if (transaction) {
-        showReceipt(transaction);
+        showReceipt(
+            transaction
+        );
     }
 }
 
 
 /* =====================================================
-   HAPUS RIWAYAT + PASSWORD
+   HAPUS SEMUA RIWAYAT
 ===================================================== */
 
 function clearTransactions() {
-
     if (!transactions.length) {
-
         alert(
             "Riwayat transaksi masih kosong."
         );
-
         return;
     }
-
 
     const confirmDelete =
         confirm(
             "Yakin ingin menghapus SEMUA riwayat transaksi?"
         );
 
-
     if (!confirmDelete) {
         return;
     }
-
 
     const password =
         prompt(
             "Masukkan password admin untuk menghapus riwayat:"
         );
 
-
     if (password === null) {
         return;
     }
 
-
-    if (password !== LOGIN_PASSWORD) {
-
+    if (
+        password !==
+        LOGIN_PASSWORD
+    ) {
         alert(
             "Password salah. Riwayat tidak dihapus."
         );
-
         return;
     }
 
-
     transactions = [];
-
 
     localStorage.removeItem(
         TRANSACTIONS_KEY
     );
 
-
     saveTransactions();
 
-
     renderTransactions();
-
     renderDashboard();
-
     renderDailyReport();
-
 
     alert(
         "Semua riwayat berhasil dihapus."
@@ -1760,27 +1916,29 @@ function clearTransactions() {
 ===================================================== */
 
 function renderDailyReport() {
-
     const dateInput =
         get("rekapDate");
 
-
-    if (!dateInput.value) {
-        dateInput.value = getToday();
+    if (!dateInput) {
+        return;
     }
 
+    if (!dateInput.value) {
+        dateInput.value =
+            getToday();
+    }
 
     const selectedDate =
         dateInput.value;
-
 
     const dailyTransactions =
         transactions.filter(
             transaction =>
                 String(transaction.date)
-                    .startsWith(selectedDate)
+                    .startsWith(
+                        selectedDate
+                    )
         );
-
 
     let totalItems = 0;
     let totalDiscount = 0;
@@ -1788,46 +1946,45 @@ function renderDailyReport() {
     let cashRevenue = 0;
     let qrisRevenue = 0;
 
-
     const productSummary = {};
-
 
     dailyTransactions.forEach(
         transaction => {
 
             totalDiscount +=
                 Number(
-                    transaction.discount || 0
+                    transaction.discount ||
+                    0
                 );
-
 
             totalRevenue +=
                 Number(
-                    transaction.total || 0
+                    transaction.total ||
+                    0
                 );
-
 
             const method =
                 transaction.paymentMethod ||
                 "CASH";
 
-
             if (method === "CASH") {
 
                 cashRevenue +=
                     Number(
-                        transaction.total || 0
+                        transaction.total ||
+                        0
                     );
 
-            } else if (method === "QRIS") {
+            } else if (
+                method === "QRIS"
+            ) {
 
                 qrisRevenue +=
                     Number(
-                        transaction.total || 0
+                        transaction.total ||
+                        0
                     );
-
             }
-
 
             if (
                 Array.isArray(
@@ -1840,39 +1997,35 @@ function renderDailyReport() {
 
                         const qty =
                             Number(
-                                item.qty || 0
+                                item.qty ||
+                                0
                             );
-
 
                         const itemTotal =
                             Number(
-                                item.subtotal || 0
+                                item.subtotal ||
+                                0
                             );
 
-
-                        totalItems += qty;
-
+                        totalItems +=
+                            qty;
 
                         if (
                             !productSummary[
                                 item.name
                             ]
                         ) {
-
                             productSummary[
                                 item.name
                             ] = {
                                 qty: 0,
                                 total: 0
                             };
-
                         }
-
 
                         productSummary[
                             item.name
                         ].qty += qty;
-
 
                         productSummary[
                             item.name
@@ -1884,62 +2037,73 @@ function renderDailyReport() {
         }
     );
 
+    const rekapTransaksi =
+        get("rekapTransaksi");
 
-    get(
-        "rekapTransaksi"
-    ).textContent =
-        dailyTransactions.length;
+    const rekapItem =
+        get("rekapItem");
 
+    const rekapDiskon =
+        get("rekapDiskon");
 
-    get(
-        "rekapItem"
-    ).textContent =
-        totalItems;
+    const rekapOmzet =
+        get("rekapOmzet");
 
+    const rekapCash =
+        get("rekapCash");
 
-    get(
-        "rekapDiskon"
-    ).textContent =
-        formatRupiah(
-            totalDiscount
-        );
+    const rekapQris =
+        get("rekapQris");
 
+    if (rekapTransaksi) {
+        rekapTransaksi.textContent =
+            dailyTransactions.length;
+    }
 
-    get(
-        "rekapOmzet"
-    ).textContent =
-        formatRupiah(
-            totalRevenue
-        );
+    if (rekapItem) {
+        rekapItem.textContent =
+            totalItems;
+    }
 
+    if (rekapDiskon) {
+        rekapDiskon.textContent =
+            formatRupiah(
+                totalDiscount
+            );
+    }
 
-    get(
-        "rekapCash"
-    ).textContent =
-        formatRupiah(
-            cashRevenue
-        );
+    if (rekapOmzet) {
+        rekapOmzet.textContent =
+            formatRupiah(
+                totalRevenue
+            );
+    }
 
+    if (rekapCash) {
+        rekapCash.textContent =
+            formatRupiah(
+                cashRevenue
+            );
+    }
 
-    get(
-        "rekapQris"
-    ).textContent =
-        formatRupiah(
-            qrisRevenue
-        );
-
+    if (rekapQris) {
+        rekapQris.textContent =
+            formatRupiah(
+                qrisRevenue
+            );
+    }
 
     const table =
-        get(
-            "rekapProduk"
-        );
+        get("rekapProduk");
 
+    if (!table) {
+        return;
+    }
 
     const entries =
         Object.entries(
             productSummary
         );
-
 
     if (!entries.length) {
 
@@ -1957,24 +2121,23 @@ function renderDailyReport() {
         return;
     }
 
-
     entries.sort(
         (
-            [,a],
-            [,b]
+            [, a],
+            [, b]
         ) =>
             b.qty - a.qty
     );
 
-
     table.innerHTML =
         entries.map(
-            ([name,data]) => `
-
+            ([name, data]) => `
                 <tr>
 
                     <td>
-                        ${escapeHtml(name)}
+                        ${escapeHtml(
+                            name
+                        )}
                     </td>
 
                     <td>
@@ -1998,10 +2161,15 @@ function renderDailyReport() {
 ===================================================== */
 
 function printDailyReport() {
+    const dateInput =
+        get("rekapDate");
+
+    if (!dateInput) {
+        return;
+    }
 
     const date =
-        get("rekapDate").value;
-
+        dateInput.value;
 
     const dailyTransactions =
         transactions.filter(
@@ -2010,52 +2178,51 @@ function printDailyReport() {
                     .startsWith(date)
         );
 
-
     let totalItems = 0;
     let totalDiscount = 0;
     let totalRevenue = 0;
     let cashRevenue = 0;
     let qrisRevenue = 0;
 
-
     const productsReport = {};
-
 
     dailyTransactions.forEach(
         transaction => {
 
             totalDiscount +=
                 Number(
-                    transaction.discount || 0
+                    transaction.discount ||
+                    0
                 );
-
 
             totalRevenue +=
                 Number(
-                    transaction.total || 0
+                    transaction.total ||
+                    0
                 );
-
 
             const method =
                 transaction.paymentMethod ||
                 "CASH";
 
-
             if (method === "CASH") {
 
                 cashRevenue +=
                     Number(
-                        transaction.total || 0
+                        transaction.total ||
+                        0
                     );
 
-            } else if (method === "QRIS") {
+            } else if (
+                method === "QRIS"
+            ) {
 
                 qrisRevenue +=
                     Number(
-                        transaction.total || 0
+                        transaction.total ||
+                        0
                     );
             }
-
 
             if (
                 Array.isArray(
@@ -2068,25 +2235,21 @@ function printDailyReport() {
 
                         const qty =
                             Number(
-                                item.qty || 0
+                                item.qty ||
+                                0
                             );
 
-
                         totalItems += qty;
-
 
                         if (
                             !productsReport[
                                 item.name
                             ]
                         ) {
-
                             productsReport[
                                 item.name
                             ] = 0;
-
                         }
-
 
                         productsReport[
                             item.name
@@ -2097,9 +2260,7 @@ function printDailyReport() {
         }
     );
 
-
     let text = "";
-
 
     text +=
         "====================================\n";
@@ -2148,22 +2309,18 @@ function printDailyReport() {
     text +=
         "------------------------------------\n";
 
-
     Object.entries(
         productsReport
     ).forEach(
-        ([name,qty]) => {
+        ([name, qty]) => {
 
             text +=
                 `${name} : ${qty}\n`;
-
         }
     );
 
-
     text +=
         "====================================\n";
-
 
     const printWindow =
         window.open(
@@ -2172,18 +2329,15 @@ function printDailyReport() {
             "width=500,height=700"
         );
 
-
     if (!printWindow) {
-
         alert(
             "Popup browser diblokir."
         );
-
         return;
     }
 
-
     printWindow.document.write(`
+        <!DOCTYPE html>
         <html>
 
         <head>
@@ -2196,8 +2350,11 @@ function printDailyReport() {
                 style="
                     font-family: monospace;
                     font-size: 14px;
+                    white-space: pre-wrap;
                 "
-            >${escapeHtml(text)}</pre>
+            >${escapeHtml(
+                text
+            )}</pre>
 
             <script>
                 window.onload = function() {
@@ -2210,7 +2367,6 @@ function printDailyReport() {
         </html>
     `);
 
-
     printWindow.document.close();
 }
 
@@ -2220,14 +2376,15 @@ function printDailyReport() {
 ===================================================== */
 
 function setupTabs() {
-
     const tabs =
-        document.querySelectorAll(".tab");
-
+        document.querySelectorAll(
+            ".tab"
+        );
 
     const contents =
-        document.querySelectorAll(".tab-content");
-
+        document.querySelectorAll(
+            ".tab-content"
+        );
 
     tabs.forEach(tab => {
 
@@ -2242,7 +2399,6 @@ function setupTabs() {
                         )
                 );
 
-
                 contents.forEach(
                     item =>
                         item.classList.remove(
@@ -2250,17 +2406,14 @@ function setupTabs() {
                         )
                 );
 
-
                 this.classList.add(
                     "active"
                 );
-
 
                 const target =
                     get(
                         this.dataset.tab
                     );
-
 
                 if (target) {
                     target.classList.add(
@@ -2268,17 +2421,14 @@ function setupTabs() {
                     );
                 }
 
-
                 if (
                     this.dataset.tab ===
                     "rekap"
                 ) {
-
                     renderDailyReport();
                 }
             }
         );
-
     });
 }
 
@@ -2289,143 +2439,143 @@ function setupTabs() {
 
 function setupEvents() {
 
-    get("loginForm")
-        .addEventListener(
-            "submit",
-            handleLogin
-        );
+    /*
+       Semua event menggunakan on().
+       Jadi element yang hilang tidak membuat
+       seluruh JavaScript berhenti.
+    */
 
+    on(
+        "loginForm",
+        "submit",
+        handleLogin
+    );
 
-    get("togglePassword")
-        .addEventListener(
-            "click",
-            togglePassword
-        );
+    on(
+        "togglePassword",
+        "click",
+        togglePassword
+    );
 
+    on(
+        "logoutBtn",
+        "click",
+        logout
+    );
 
-    get("logoutBtn")
-        .addEventListener(
-            "click",
-            logout
-        );
+    on(
+        "searchProduct",
+        "input",
+        renderProducts
+    );
 
+    on(
+        "paymentMethod",
+        "change",
+        updatePaymentMethod
+    );
 
-    get("searchProduct")
-        .addEventListener(
-            "input",
-            renderProducts
-        );
+    on(
+        "discount",
+        "input",
+        calculateTotal
+    );
 
+    on(
+        "payment",
+        "input",
+        calculateTotal
+    );
 
-    get("paymentMethod")
-        .addEventListener(
-            "change",
-            updatePaymentMethod
-        );
+    on(
+        "clearCart",
+        "click",
+        clearCart
+    );
 
+    on(
+        "checkoutBtn",
+        "click",
+        checkout
+    );
 
-    get("discount")
-        .addEventListener(
-            "input",
-            calculateTotal
-        );
+    on(
+        "addProductBtn",
+        "click",
+        () => openProductModal()
+    );
 
+    on(
+        "closeModal",
+        "click",
+        closeProductModal
+    );
 
-    get("payment")
-        .addEventListener(
-            "input",
-            calculateTotal
-        );
+    on(
+        "cancelModal",
+        "click",
+        closeProductModal
+    );
 
+    on(
+        "productForm",
+        "submit",
+        saveProduct
+    );
 
-    get("clearCart")
-        .addEventListener(
-            "click",
-            clearCart
-        );
+    on(
+        "clearTransactions",
+        "click",
+        clearTransactions
+    );
 
+    on(
+        "closeReceipt",
+        "click",
+        () => {
+            const modal =
+                get("receiptModal");
 
-    get("checkoutBtn")
-        .addEventListener(
-            "click",
-            checkout
-        );
+            if (modal) {
+                modal.classList.add(
+                    "hidden"
+                );
+            }
+        }
+    );
 
+    on(
+        "closeReceiptBtn",
+        "click",
+        () => {
+            const modal =
+                get("receiptModal");
 
-    get("addProductBtn")
-        .addEventListener(
-            "click",
-            () => openProductModal()
-        );
+            if (modal) {
+                modal.classList.add(
+                    "hidden"
+                );
+            }
+        }
+    );
 
+    on(
+        "printReceipt",
+        "click",
+        printReceipt
+    );
 
-    get("closeModal")
-        .addEventListener(
-            "click",
-            closeProductModal
-        );
+    on(
+        "rekapDate",
+        "change",
+        renderDailyReport
+    );
 
-
-    get("cancelModal")
-        .addEventListener(
-            "click",
-            closeProductModal
-        );
-
-
-    get("productForm")
-        .addEventListener(
-            "submit",
-            saveProduct
-        );
-
-
-    get("clearTransactions")
-        .addEventListener(
-            "click",
-            clearTransactions
-        );
-
-
-    get("closeReceipt")
-        .addEventListener(
-            "click",
-            () =>
-                get("receiptModal")
-                    .classList
-                    .add("hidden")
-        );
-
-
-    get("closeReceiptBtn")
-        .addEventListener(
-            "click",
-            () =>
-                get("receiptModal")
-                    .classList
-                    .add("hidden")
-        );
-
-
-    get("printReceipt")
-        .addEventListener(
-            "click",
-            printReceipt
-        );
-
-
-    get("rekapDate")
-        .addEventListener(
-            "change",
-            renderDailyReport
-        );
-
-
-    get("printRekap")
-        .addEventListener(
-            "click",
-            printDailyReport
-        );
+    on(
+        "printRekap",
+        "click",
+        printDailyReport
+    );
 }
 
 
@@ -2434,17 +2584,11 @@ function setupEvents() {
 ===================================================== */
 
 function renderAll() {
-
     renderDashboard();
-
     renderProducts();
-
     renderProductTable();
-
     renderCart();
-
     renderTransactions();
-
     renderDailyReport();
 }
 
@@ -2457,15 +2601,27 @@ document.addEventListener(
     "DOMContentLoaded",
     function() {
 
-        get("rekapDate").value =
-            getToday();
+        const rekapDate =
+            get("rekapDate");
 
-        get("paymentMethod").value =
-            "CASH";
+        const paymentMethod =
+            get("paymentMethod");
+
+        if (rekapDate) {
+            rekapDate.value =
+                getToday();
+        }
+
+        if (paymentMethod) {
+            paymentMethod.value =
+                "CASH";
+        }
 
         setupTabs();
 
         setupEvents();
+
+        updateClock();
 
         updatePaymentMethod();
 
@@ -2477,7 +2633,7 @@ document.addEventListener(
 
 
 /* =====================================================
-   AGAR BISA DIPANGGIL DARI HTML
+   GLOBAL FUNCTION
 ===================================================== */
 
 window.addToCart =
@@ -2497,3 +2653,9 @@ window.deleteProduct =
 
 window.viewTransaction =
     viewTransaction;
+
+window.openProductModal =
+    openProductModal;
+
+window.closeProductModal =
+    closeProductModal;
