@@ -1,5 +1,5 @@
 const LOGIN_USERNAME = "admin";
-const LOGIN_PASSWORD = "12345";
+const LOGIN_PASSWORD = "678910";
 
 const LOGIN_SESSION_KEY =
     "kasirku_login_session_v3";
