@@ -779,6 +779,39 @@ select:focus {
 
 
 /* =====================================================
+   DISCOUNT
+===================================================== */
+
+.discount-section {
+
+    margin-top: 12px;
+}
+
+.discount-section label {
+
+    display: block;
+
+    margin:
+        12px 0 6px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+}
+
+.input-help {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color: #6b7280;
+
+    font-size: 12px;
+}
+
+
+/* =====================================================
    PAYMENT
 ===================================================== */
 
