@@ -108,6 +108,7 @@
             </div>
 
             <button
+                type="button"
                 id="logoutBtn"
                 class="logout-btn"
             >
@@ -170,6 +171,7 @@
         <nav class="tabs">
 
             <button
+                type="button"
                 class="tab active"
                 data-tab="kasir"
             >
@@ -177,6 +179,7 @@
             </button>
 
             <button
+                type="button"
                 class="tab"
                 data-tab="produk"
             >
@@ -184,6 +187,7 @@
             </button>
 
             <button
+                type="button"
                 class="tab"
                 data-tab="riwayat"
             >
@@ -191,6 +195,7 @@
             </button>
 
             <button
+                type="button"
                 class="tab"
                 data-tab="rekap"
             >
@@ -263,7 +268,8 @@
                         </div>
 
                         <button
-                            id="clearCart"
+                            type="button"
+                id="clearCart"
                             class="btn btn-danger btn-small"
                         >
                             Kosongkan
@@ -323,7 +329,29 @@
                     </div>
 
 
-                    <!-- PEMBAYARAN -->
+                    <!-- DISKON -->
+                <div class="discount-section">
+
+                    <label for="discount">
+                        Diskon
+                    </label>
+
+                    <input
+                        type="number"
+                        id="discount"
+                        min="0"
+                        value="0"
+                        placeholder="Masukkan diskon"
+                    >
+
+                    <small class="input-help">
+                        Masukkan nominal diskon dalam rupiah.
+                    </small>
+
+                </div>
+
+
+                <!-- PEMBAYARAN -->
 
                     <div class="payment-section">
 
@@ -409,7 +437,8 @@
 
 
                         <button
-                            id="checkoutBtn"
+                            type="button"
+                id="checkoutBtn"
                             class="btn btn-primary btn-large"
                         >
                             Bayar & Simpan
@@ -450,7 +479,8 @@
                     </div>
 
                     <button
-                        id="addProductBtn"
+                        type="button"
+                id="addProductBtn"
                         class="btn btn-primary"
                     >
                         + Tambah Produk
@@ -517,7 +547,8 @@
                     </div>
 
                     <button
-                        id="clearTransactions"
+                        type="button"
+                id="clearTransactions"
                         class="btn btn-danger"
                     >
                         Hapus Semua Riwayat
@@ -733,7 +764,8 @@
                 <div class="report-actions">
 
                     <button
-                        id="printRekap"
+                        type="button"
+                id="printRekap"
                         class="btn btn-primary"
                     >
                         Cetak Rekap
@@ -766,7 +798,8 @@
                 </h3>
 
                 <button
-                    id="closeModal"
+                    type="button"
+                id="closeModal"
                     class="icon-button"
                 >
                     ×
@@ -879,7 +912,8 @@
                 </h3>
 
                 <button
-                    id="closeReceipt"
+                    type="button"
+                id="closeReceipt"
                     class="icon-button"
                 >
                     ×
@@ -897,7 +931,8 @@
             <div class="modal-actions">
 
                 <button
-                    id="printReceipt"
+                    type="button"
+                id="printReceipt"
                     class="btn btn-primary"
                 >
                     Cetak Struk
@@ -905,7 +940,8 @@
 
 
                 <button
-                    id="closeReceiptBtn"
+                    type="button"
+                id="closeReceiptBtn"
                     class="btn btn-secondary"
                 >
                     Tutup
