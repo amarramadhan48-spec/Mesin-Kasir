@@ -19,9 +19,7 @@
 
 <body>
 
-    <!-- =========================
-         LOGIN
-    ========================== -->
+    <!-- LOGIN -->
 
     <div
         id="loginPage"
@@ -49,8 +47,8 @@
                 </label>
 
                 <input
-                    type="text"
                     id="username"
+                    type="text"
                     placeholder="Masukkan username"
                     autocomplete="username"
                     required
@@ -63,17 +61,17 @@
                 <div class="password-wrapper">
 
                     <input
-                        type="password"
                         id="password"
+                        type="password"
                         placeholder="Masukkan password"
                         autocomplete="current-password"
                         required
                     >
 
                     <button
-                        type="button"
                         id="togglePassword"
                         class="show-password"
+                        type="button"
                     >
                         👁
                     </button>
@@ -86,8 +84,8 @@
                 ></p>
 
                 <button
-                    type="submit"
                     class="btn btn-primary btn-large"
+                    type="submit"
                 >
                     Masuk
                 </button>
@@ -99,16 +97,12 @@
     </div>
 
 
-    <!-- =========================
-         APP
-    ========================== -->
+    <!-- APP -->
 
     <div
         id="appPage"
         class="app-hidden"
     >
-
-        <!-- HEADER -->
 
         <header class="topbar">
 
@@ -134,9 +128,9 @@
                 </div>
 
                 <button
-                    type="button"
                     id="logoutBtn"
                     class="logout-btn"
+                    type="button"
                 >
                     Logout
                 </button>
@@ -148,14 +142,11 @@
 
         <main class="container">
 
-            <!-- =========================
-                 STATISTIK
-            ========================== -->
+            <!-- STATISTIK -->
 
             <section class="stats">
 
                 <div class="stat-card">
-
                     <span>
                         Total Produk
                     </span>
@@ -163,12 +154,10 @@
                     <strong id="statProducts">
                         0
                     </strong>
-
                 </div>
 
 
                 <div class="stat-card">
-
                     <span>
                         Transaksi Hari Ini
                     </span>
@@ -176,12 +165,10 @@
                     <strong id="statTransactions">
                         0
                     </strong>
-
                 </div>
 
 
                 <div class="stat-card">
-
                     <span>
                         Omzet Hari Ini
                     </span>
@@ -189,12 +176,10 @@
                     <strong id="statRevenue">
                         Rp0
                     </strong>
-
                 </div>
 
 
                 <div class="stat-card">
-
                     <span>
                         Stok Menipis
                     </span>
@@ -202,45 +187,42 @@
                     <strong id="statLowStock">
                         0
                     </strong>
-
                 </div>
 
             </section>
 
 
-            <!-- =========================
-                 TAB
-            ========================== -->
+            <!-- TAB -->
 
             <nav class="tabs">
 
                 <button
-                    type="button"
                     class="tab active"
+                    type="button"
                     data-tab="kasir"
                 >
                     Kasir
                 </button>
 
                 <button
-                    type="button"
                     class="tab"
+                    type="button"
                     data-tab="produk"
                 >
                     Produk
                 </button>
 
                 <button
-                    type="button"
                     class="tab"
+                    type="button"
                     data-tab="riwayat"
                 >
                     Riwayat
                 </button>
 
                 <button
-                    type="button"
                     class="tab"
+                    type="button"
                     data-tab="rekap"
                 >
                     Rekap Harian
@@ -249,9 +231,7 @@
             </nav>
 
 
-            <!-- =========================
-                 KASIR
-            ========================== -->
+            <!-- KASIR -->
 
             <section
                 id="kasir"
@@ -260,7 +240,7 @@
 
                 <div class="cashier-grid">
 
-                    <!-- DAFTAR PRODUK -->
+                    <!-- PRODUK -->
 
                     <div class="panel">
 
@@ -278,11 +258,10 @@
 
                             </div>
 
-
                             <input
-                                type="search"
                                 id="searchProduct"
                                 class="search"
+                                type="search"
                                 placeholder="Cari produk..."
                             >
 
@@ -316,9 +295,9 @@
                             </div>
 
                             <button
-                                type="button"
                                 id="clearCart"
                                 class="btn btn-danger btn-small"
+                                type="button"
                             >
                                 Kosongkan
                             </button>
@@ -390,7 +369,7 @@
                         </div>
 
 
-                        <!-- PEMBAYARAN -->
+                        <!-- PAYMENT -->
 
                         <div class="payment-section">
 
@@ -411,15 +390,13 @@
                             </select>
 
 
-                            <!-- DISKON PERSEN -->
-
                             <label for="discount">
                                 Diskon (%)
                             </label>
 
                             <input
-                                type="number"
                                 id="discount"
+                                type="number"
                                 min="0"
                                 max="100"
                                 step="0.01"
@@ -439,8 +416,8 @@
                                 </label>
 
                                 <input
-                                    type="number"
                                     id="payment"
+                                    type="number"
                                     min="0"
                                     placeholder="Masukkan uang"
                                 >
@@ -497,9 +474,9 @@
 
 
                             <button
-                                type="button"
                                 id="checkoutBtn"
                                 class="btn btn-primary btn-large"
+                                type="button"
                             >
                                 Bayar &amp; Simpan
                             </button>
@@ -513,9 +490,7 @@
             </section>
 
 
-            <!-- =========================
-                 PRODUK
-            ========================== -->
+            <!-- PRODUK -->
 
             <section
                 id="produk"
@@ -540,9 +515,9 @@
 
 
                         <button
-                            type="button"
                             id="addProductBtn"
                             class="btn btn-primary"
+                            type="button"
                         >
                             + Tambah Produk
                         </button>
@@ -600,9 +575,7 @@
             </section>
 
 
-            <!-- =========================
-                 RIWAYAT
-            ========================== -->
+            <!-- RIWAYAT -->
 
             <section
                 id="riwayat"
@@ -627,9 +600,9 @@
 
 
                         <button
-                            type="button"
                             id="clearTransactions"
                             class="btn btn-danger"
+                            type="button"
                         >
                             Hapus Semua Riwayat
                         </button>
@@ -695,9 +668,7 @@
             </section>
 
 
-            <!-- =========================
-                 REKAP
-            ========================== -->
+            <!-- REKAP -->
 
             <section
                 id="rekap"
@@ -728,16 +699,14 @@
                             </label>
 
                             <input
-                                type="date"
                                 id="rekapDate"
+                                type="date"
                             >
 
                         </div>
 
                     </div>
 
-
-                    <!-- STATISTIK REKAP -->
 
                     <div class="stats report-stats">
 
@@ -795,11 +764,11 @@
                     </div>
 
 
-                    <!-- PAYMENT SUMMARY -->
-
                     <div class="payment-summary">
 
-                        <div class="payment-summary-card cash-summary">
+                        <div
+                            class="payment-summary-card cash-summary"
+                        >
 
                             <span>
                                 Omzet Cash
@@ -812,7 +781,9 @@
                         </div>
 
 
-                        <div class="payment-summary-card qris-summary">
+                        <div
+                            class="payment-summary-card qris-summary"
+                        >
 
                             <span>
                                 Omzet QRIS
@@ -856,7 +827,6 @@
 
                             </thead>
 
-
                             <tbody
                                 id="rekapProduk"
                             ></tbody>
@@ -869,20 +839,19 @@
                     <div class="report-actions">
 
                         <button
-                            type="button"
                             id="printRekap"
                             class="btn btn-primary"
+                            type="button"
                         >
                             Cetak Rekap
                         </button>
 
-
                         <button
-                            type="button"
                             id="exportRekap"
                             class="btn btn-secondary"
+                            type="button"
                         >
-                            Export Excel
+                            Export Excel (.xlsx)
                         </button>
 
                     </div>
@@ -894,9 +863,7 @@
         </main>
 
 
-        <!-- =========================
-             MODAL PRODUK
-        ========================== -->
+        <!-- MODAL PRODUK -->
 
         <div
             id="productModal"
@@ -912,9 +879,9 @@
                     </h3>
 
                     <button
-                        type="button"
                         id="closeModal"
                         class="icon-button"
+                        type="button"
                     >
                         ×
                     </button>
@@ -984,17 +951,17 @@
                     <div class="modal-actions">
 
                         <button
-                            type="button"
                             id="cancelModal"
                             class="btn btn-secondary"
+                            type="button"
                         >
                             Batal
                         </button>
 
 
                         <button
-                            type="submit"
                             class="btn btn-primary"
+                            type="submit"
                         >
                             Simpan
                         </button>
@@ -1008,9 +975,7 @@
         </div>
 
 
-        <!-- =========================
-             MODAL STRUK
-        ========================== -->
+        <!-- MODAL STRUK -->
 
         <div
             id="receiptModal"
@@ -1026,9 +991,9 @@
                     </h3>
 
                     <button
-                        type="button"
                         id="closeReceipt"
                         class="icon-button"
+                        type="button"
                     >
                         ×
                     </button>
@@ -1045,18 +1010,18 @@
                 <div class="modal-actions">
 
                     <button
-                        type="button"
                         id="printReceipt"
                         class="btn btn-primary"
+                        type="button"
                     >
                         Cetak Struk
                     </button>
 
 
                     <button
-                        type="button"
                         id="closeReceiptBtn"
                         class="btn btn-secondary"
+                        type="button"
                     >
                         Tutup
                     </button>
